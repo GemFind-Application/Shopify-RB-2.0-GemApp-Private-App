@@ -1,0 +1,12 @@
+.product-form__quantity {
+    display: none;
+}
+.product-form__buttons {
+    display: none;
+}
+.product-form__cart-submit {
+    display: none;
+}
+.shopify-payment-button {
+    display: none;
+}

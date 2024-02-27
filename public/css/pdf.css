@@ -1,0 +1,282 @@
+.print-header {
+    background: #1979c3;
+
+    float: left;
+
+    width: 100%;
+}
+
+.header-container {
+    display: table;
+
+    width: 100%;
+}
+
+.print-header h2,
+.print-header h4 {
+    margin: 0;
+
+    padding: 0;
+}
+
+.print-header .header-title,
+.print-header .header-date {
+    display: table-cell;
+
+    text-align: left;
+
+    vertical-align: middle;
+
+    color: #fff;
+}
+
+.print-header .header-date {
+    text-align: right;
+}
+
+.print-header h2 {
+    font-size: 30px;
+
+    font-weight: 400;
+}
+
+.print-header h4 {
+    font-size: 20px;
+
+    font-weight: 400;
+}
+
+.header-container {
+    display: table;
+
+    width: 100%;
+
+    padding: 22px 0;
+
+    max-width: 1170px;
+
+    margin: 0 auto;
+}
+
+.diamonds-print-preview {
+    float: left;
+
+    width: 100%;
+
+    background: #f7f7f7;
+
+    border: 1px solid #e8e8e8;
+
+    box-sizing: border-box;
+
+    padding: 20px;
+
+    margin-top: 40px;
+}
+
+.diamonds-print-preview .diamond-info-one,
+.diamonds-print-preview .diamond-info-two {
+    float: left;
+
+    width: 50%;
+
+    text-align: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+.diamonds-print-preview .print-info {
+    float: left;
+
+    width: 100%;
+
+    text-align: center;
+
+    margin: 22px 0;
+}
+
+.diamonds-print-preview .print-info span {
+    font-size: 20px;
+
+    color: #000;
+}
+
+.diamonds-print-preview .print-info p {
+    font-size: 24px;
+
+    color: #000;
+
+    font-weight: 600;
+}
+
+.diamonds-print-preview .print-info p span {
+    font-size: 24px;
+
+    color: #1979c3;
+}
+
+.diamonds-grade-info {
+    display: table-cell;
+
+    vertical-align: middle;
+}
+
+.diamonds-grade {
+    display: table-cell;
+
+    vertical-align: middle;
+
+    width: 170px;
+}
+
+.print-diamond-certifications {
+    float: left;
+
+    width: 100%;
+
+    clear: both;
+
+    background: #e8e8e8;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    margin-top: 40px;
+
+    border: 1px solid #e8e8e8;
+
+    margin-bottom: 40px;
+}
+
+.diamonds-grade-info p {
+    margin: 0;
+
+    padding: 0;
+
+    font-size: 18px;
+
+    color: #000;
+}
+
+.print-details {
+    float: left;
+
+    width: 100%;
+
+    clear: both;
+
+    border: 1px solid #e8e8e8;
+}
+
+.diamond-title {
+    background: #1979c3;
+
+    display: table;
+
+    width: 100%;
+
+    vertical-align: middle;
+
+    padding: 30px 20px;
+
+    box-sizing: border-box;
+}
+
+.diamond-title h2 {
+    color: #fff;
+
+    font-size: 32px;
+
+    font-weight: 400;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+.diamond-title p {
+    color: #fff;
+
+    font-size: 18px;
+
+    margin: 0;
+
+    padding: 0;
+
+    margin-top: 8px;
+}
+
+.diamond-title .diamond-name {
+    display: table-cell;
+
+    vertical-align: middle;
+}
+
+.diamond-title .diamond-price {
+    display: table-cell;
+
+    vertical-align: middle;
+}
+
+.diamond-title .diamond-price span {
+    font-size: 30px;
+
+    color: #fff;
+}
+
+.diamond-inner-details {
+    float: left;
+
+    width: 100%;
+}
+
+.diamond-inner-details ul {
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+.diamond-inner-details ul li {
+    float: left;
+
+    width: 100%;
+
+    padding: 19px 30px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.diamond-inner-details ul li div {
+    float: left;
+
+    width: 50%;
+
+    text-align: left;
+}
+
+.diamond-inner-details ul li .diamond-quality {
+    text-align: right;
+}
+
+.diamond-specifications p {
+    font-size: 18px;
+
+    color: #000;
+
+    font-weight: 500;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+.diamond-inner-details ul li:last-child {
+    border: 0;
+}
