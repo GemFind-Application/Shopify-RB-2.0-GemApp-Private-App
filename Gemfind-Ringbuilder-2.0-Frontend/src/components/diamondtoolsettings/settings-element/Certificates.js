@@ -1,37 +1,51 @@
-import React from "react";
-import Checkbox from "@mui/material/Checkbox";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { LoadingOverlay, Loader } from "react-overlay-loader";
 
 const Certificates = (props) => {
-  const handleChange = (event) => {
-    // Assuming you have an ordertype associated with the event
-    const ordertype = event.target.value;
-    // Pass the ordertype to the callback prop
-    props.onChangeOrderType(ordertype);
-    console.log("ordertype");
-    console.log(ordertype);
-  };
+    const [selectedCertificates, setSelectedCertificates] = useState([]);
+    const [loaded, setLoaded] = useState(false);
 
-  return (
-    <div className="range-slider_diamond">
-      <div className="slider">
-        <h4 className="f_heading diamond_heading"> CERTIFICATES</h4>
-        <div className="diamond-ui-slider diamond-small-slider">
-          <select
-            name="dropdown-orderby"
-            id="cerfificate"
-            className="cer-sort"
-            onChange={handleChange} // Add onChange event handler
-          >
-            {props.certificateData.map((item) => (
-              <option key={item.certificateName} value={item.certificateName}>
-                {item.certificateName}
-              </option>
-            ))}
-          </select>
+    const handleChange = (selectedOptions) => {
+        setLoaded(true);
+
+        const CerificateData = selectedOptions
+            .map(function (m) {
+                return m.value;
+            })
+            .join(",");
+
+        setSelectedCertificates(selectedOptions);
+        props.onChangeOrderType(CerificateData);
+
+        setTimeout(() => {
+            setLoaded(false);
+        }, 1000);
+    };
+
+    useEffect(() => {}, [selectedCertificates]);
+
+    return (
+        <div className="range-slider_diamond">
+            <LoadingOverlay className="_loading_overlay_wrapper">
+                <Loader fullPage loading={loaded} />{" "}
+            </LoadingOverlay>
+            <div className="slider">
+                <h4 className="f_heading diamond_heading"> CERTIFICATES</h4>
+                <div className="diamond-ui-slider diamond-small-slider">
+                    <Select
+                        options={props.certificateData.map((item) => ({
+                            label: item.certificateName, // Use 'certificateName' or appropriate property here
+                            value: item.certificateName, // Use 'certificateName' or appropriate property here
+                        }))}
+                        onChange={handleChange}
+                        value={selectedCertificates}
+                        isMulti
+                    />
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Certificates;
