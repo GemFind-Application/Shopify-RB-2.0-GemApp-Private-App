@@ -166,13 +166,18 @@ class InitToolController extends Controller
         $response = curl_exec($curl);
         $server_output = json_decode($response,true);
 
-        if ($server_output['mountingList'][0]['showPrice'] == true ) {
-            if ($server_output['mountingList'][0]['currencyFrom'] == 'USD') {
-            $currency = '$';
-            }else{
-                $currency = $server_output['mountingList'][0]['currencySymbol'];
+
+        if (!empty($server_output['mountingList'])) {
+            if ($server_output['mountingList'][0]['showPrice'] == true) {
+                if ($server_output['mountingList'][0]['currencyFrom'] == 'USD') {
+                    $currency = '$';
+                } else {
+                    $currency = $server_output['mountingList'][0]['currencySymbol'];
+                }
+            } else {
+                $currency = '';
             }
-        }else{
+        } else {
             $currency = '';
         }
 
@@ -189,9 +194,13 @@ class InitToolController extends Controller
         $response = curl_exec($curl);
         $server_output = json_decode($response,true);
 
-        if ($server_output['mountingList'][0]['showPrice'] == true ) {
-            $currencyFrom = $server_output['mountingList'][0]['currencyFrom'];
-        }else{
+         if (!empty($server_output['mountingList'])) {
+            if ($server_output['mountingList'][0]['showPrice'] == true) {
+                $currencyFrom = $server_output['mountingList'][0]['currencyFrom'];
+            } else {
+                $currencyFrom = '';
+            }
+        } else {
             $currencyFrom = '';
         }
 
