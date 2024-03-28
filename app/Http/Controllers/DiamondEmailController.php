@@ -153,7 +153,7 @@ class DiamondEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         // $retaileremail = ($storeAdminEmail ? $storeAdminEmail : $diamondData['diamondData']['vendorEmail']);
         $retailername = ($diamondData['diamondData']['vendorName'] ? $diamondData['diamondData']['vendorName'] : $hintData['shop']);
@@ -179,7 +179,7 @@ class DiamondEmailController extends Controller
         //Sender Email
         $user['to'] = $request->email;
 
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $hintData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('diamondDropHintSender', $data, function ($messages) use ($user) {
@@ -246,7 +246,7 @@ class DiamondEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         // $retaileremail = ($storeAdminEmail ? $storeAdminEmail : $diamondData['diamondData']['vendorEmail']);
         $retailername = ($diamondData['diamondData']['vendorName'] ? $diamondData['diamondData']['vendorName'] : $reqData['shop']);
@@ -321,7 +321,7 @@ class DiamondEmailController extends Controller
         //Sender Email
 
         $user['to'] = $req_post_data['email'];
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $reqData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('diamondReqInfoSender', $data, function ($messages) use ($user) {
@@ -378,7 +378,7 @@ class DiamondEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         // $retaileremail = ($storeAdminEmail ? $storeAdminEmail : $diamondData['diamondData']['vendorEmail']);
         $retailername = ($diamondData['diamondData']['vendorName'] ? $diamondData['diamondData']['vendorName'] : $frndData['shop']);
@@ -454,7 +454,7 @@ class DiamondEmailController extends Controller
         //Sender Email
         $user['to'] = $email_friend_post_data['email'];
 
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $frndData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('diamondEmailFriendSender', $data, function ($messages) use ($user) {
@@ -523,7 +523,7 @@ class DiamondEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         // $retaileremail = ($storeAdminEmail ? $storeAdminEmail : $diamondData['diamondData']['vendorEmail']);
         $retailername = ($diamondData['diamondData']['vendorName'] ? $diamondData['diamondData']['vendorName'] : $schldData['shop']);
@@ -602,7 +602,7 @@ class DiamondEmailController extends Controller
         //Sender Email
         $user['to'] = $sch_view_post_data['email'];
 
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $schldData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('diamondScheViewSender', $data, function ($messages) use ($user) {

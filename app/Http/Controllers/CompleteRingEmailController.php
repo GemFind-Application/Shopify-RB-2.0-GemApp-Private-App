@@ -142,14 +142,13 @@ class CompleteRingEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
-
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         $vendorEmail = ($storeAdminEmail ? $storeAdminEmail : $ringData['ringData']['vendorEmail']);
 
         $vendorName = ($ringData['ringData']['vendorName'] ? $ringData['ringData']['vendorName'] : $frndData['shop']);
 
-        $retaileremail = ($storeAdminEmail ? $storeAdminEmail : $diamondData['diamondData']['vendorEmail']);
+        // $retaileremail = ($storeAdminEmail ? $storeAdminEmail : $diamondData['diamondData']['vendorEmail']);
 
         $retailername = ($diamondData['diamondData']['vendorName'] ? $diamondData['diamondData']['vendorName'] : $reqData['shop']);
 
@@ -254,7 +253,7 @@ class CompleteRingEmailController extends Controller
 
             'retailerID' => $diamondData['diamondData']['retailerInfo']->retailerID ? $diamondData['diamondData']['retailerInfo']->retailerID : '',
 
-            'retailerEmail' => $diamondData['diamondData']['retailerInfo']->retailerEmail ? $diamondData['diamondData']['retailerInfo']->retailerEmail : '',
+            'retailerEmail' => $retaileremail,
 
             'retailerContactNo' => $diamondData['diamondData']['retailerInfo']->retailerContactNo ? $diamondData['diamondData']['retailerInfo']->retailerContactNo : '',
 
@@ -276,7 +275,7 @@ class CompleteRingEmailController extends Controller
 
         $user['to'] = $req_post_data['email'];
 
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $reqData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('completeRingReqInfoSender', $data, function ($messages) use ($user) {
@@ -411,7 +410,7 @@ class CompleteRingEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         //MAIL TO USER
 
@@ -499,7 +498,7 @@ class CompleteRingEmailController extends Controller
 
             'retailerID' => $diamondData['diamondData']['retailerInfo']->retailerID ? $diamondData['diamondData']['retailerInfo']->retailerID : '',
 
-            'retailerEmail' => $diamondData['diamondData']['retailerInfo']->retailerEmail ? $diamondData['diamondData']['retailerInfo']->retailerEmail : '',
+            'retailerEmail' => $retaileremail,
 
             'retailerContactNo' => $diamondData['diamondData']['retailerInfo']->retailerContactNo ? $diamondData['diamondData']['retailerInfo']->retailerContactNo : '',
 
@@ -521,7 +520,7 @@ class CompleteRingEmailController extends Controller
 
         $user['to'] = $sch_view_post_data['email'];
 
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $reqData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('completeRingScheViewSender', $data, function ($messages) use ($user) {

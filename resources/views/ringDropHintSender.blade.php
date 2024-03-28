@@ -381,13 +381,15 @@ td > a.logo > img{height: 52px; object-fit: contain;}
             </table>
             
             <!-- START FOOTER -->
+            <?php if(isset($retailerEmail)) { ?>
             <div class="footer">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                           <tr><td> <p>Do Not Reply To This E-Mail.</p>
-                           <p>If you have any questions about this message, please email <a href="mailto:{{$retailerEmail}}">{{$retailerEmail}}</a> <br> or call on <a href="tel:{{$retailerphone}}">{{$retailerphone}}</a></p>
+                           <p>If you have any questions about this message, please email <a href="mailto:{{$retailerEmail}}">{{$retailerEmail}}</a> </p>
                             <p>This message was sent to {{$hint_Recipient_email}}</p></td></tr> 
               </table>
             </div>
+            <?php } ?>
             <!-- END FOOTER -->
           <!-- END CENTERED WHITE CONTAINER -->
           </div>

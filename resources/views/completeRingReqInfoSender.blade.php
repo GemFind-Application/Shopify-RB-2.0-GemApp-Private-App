@@ -1090,17 +1090,19 @@ td > a.logo > img{height: 52px; object-fit: contain;}
 
             <!-- START FOOTER -->
 
+            <?php if(isset($vendorEmail)) { ?>
             <div class="footer">
 
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
 
                           <tr><td> <p>Do Not Reply To This E-Mail.</p>
 
-                            <p>If you have any questions about this message, please email <a href="mailto:{{$vendorEmail}}">{{$vendorEmail}}</a> <br> or call on <a href="tel:{{$vendorPhone}}">{{$vendorPhone}}</a></p></td></tr> 
+                            <p>If you have any questions about this message, please email <a href="mailto:{{$vendorEmail}}">{{$vendorEmail}}</a> </p></td></tr> 
 
               </table>
 
             </div>
+            <?php } ?>
 
             <!-- END FOOTER -->
 

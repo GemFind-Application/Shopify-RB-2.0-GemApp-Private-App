@@ -118,7 +118,7 @@ class RingEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : "";
         $retailername = ($ringData['ringData']['vendorName'] ? $ringData['ringData']['vendorName'] : $hintData['shop']);
 
         //MAIL TO USER
@@ -149,7 +149,7 @@ class RingEmailController extends Controller
 
         //Sender Email
         $user['to'] = $request->email;
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $hintData->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('ringDropHintSender', $data, function ($messages) use ($user) {
@@ -261,7 +261,7 @@ class RingEmailController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $retaileremail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $retaileremail = $storeAdminEmail ? $storeAdminEmail : "";
 
         //MAIL TO USER
         $data = [
@@ -315,7 +315,7 @@ class RingEmailController extends Controller
 
         //Sender Email
         $user['to'] = $req_post_data['email'];
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $req_post_data->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('ringReqInfoSender', $data, function ($messages) use ($user) {
@@ -414,7 +414,7 @@ class RingEmailController extends Controller
             ->first();
 
 
-        $vendorEmail = $getCustomerData->email ? $getCustomerData->email : $storeAdminEmail;
+        $vendorEmail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $vendorName = ($ringData['ringData']['vendorName'] ? $ringData['ringData']['vendorName'] : $frndData['shop']);
 
 
@@ -436,7 +436,7 @@ class RingEmailController extends Controller
             'price' => $currency . $price,
             'retailerName' => $ringData['ringData']['retailerInfo']->retailerName ? $ringData['ringData']['retailerInfo']->retailerName : '',
             'retailerID' => $ringData['ringData']['retailerInfo']->retailerID ? $ringData['ringData']['retailerInfo']->retailerID : '',
-            'retailerEmail' => $ringData['ringData']['retailerInfo']->retailerEmail ? $ringData['ringData']['retailerInfo']->retailerEmail : '',
+            'retailerEmail' => $storeAdminEmail ? $storeAdminEmail : "",
             'retailerContactNo' => $ringData['ringData']['retailerInfo']->retailerContactNo ? $ringData['ringData']['retailerInfo']->retailerContactNo : '',
             'retailerFax' => $ringData['ringData']['retailerInfo']->retailerFax ? $ringData['ringData']['retailerInfo']->retailerFax : '',
             'retailerAddress' => $ringData['ringData']['retailerInfo']->retailerAddress ? $ringData['ringData']['retailerInfo']->retailerAddress : '',
@@ -450,7 +450,7 @@ class RingEmailController extends Controller
 
         //Sender Email
         $user['to'] = $email_friend_post_data['email'];
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $email_friend_post_data->admin_email_address;
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
         Mail::send('ringEmailFriendSender', $data, function ($messages) use ($user) {
@@ -580,7 +580,7 @@ class RingEmailController extends Controller
             'price' => $currency . $price,
             'retailerName' => $ringData['ringData']['retailerInfo']->retailerName ? $ringData['ringData']['retailerInfo']->retailerName : '',
             'retailerID' => $ringData['ringData']['retailerInfo']->retailerID ? $ringData['ringData']['retailerInfo']->retailerID : '',
-            'retailerEmail' => $ringData['ringData']['retailerInfo']->retailerEmail ? $ringData['ringData']['retailerInfo']->retailerEmail : '',
+            'retailerEmail' => $storeAdminEmail ? $storeAdminEmail : "",
             'retailerContactNo' => $ringData['ringData']['retailerInfo']->retailerContactNo ? $ringData['ringData']['retailerInfo']->retailerContactNo : '',
             'retailerFax' => $ringData['ringData']['retailerInfo']->retailerFax ? $ringData['ringData']['retailerInfo']->retailerFax : '',
             'retailerAddress' => $ringData['ringData']['retailerInfo']->retailerAddress ? $ringData['ringData']['retailerInfo']->retailerAddress : '',
@@ -592,9 +592,9 @@ class RingEmailController extends Controller
             'shopurl' => $shopurl,
         ];
 
-      
 
-        $user['from'] = $getCustomerData->email ? $getCustomerData->email : $sch_view_post_data->admin_email_address;
+
+        $user['from'] = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $user['store'] = $shopData->original['name'];
 
 

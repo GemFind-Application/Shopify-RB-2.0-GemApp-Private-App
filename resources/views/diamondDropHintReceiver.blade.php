@@ -387,11 +387,13 @@ td > a.logo > img{height: 52px; object-fit: contain;}
             </table>
            
             <!-- START FOOTER -->
+            <?php if(isset($retailerEmail)) { ?>
             <div class="footer">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tr><td> <p>If you have any questions about this message, please email <a href="mailto:{{$retailerEmail}}">{{$retailerEmail}}</a> <br> or call on <a href="tel:{{$retailerphone}}">{{$retailerphone}}</a></p></td></tr> 
+                          <tr><td> <p>If you have any questions about this message, please email <a href="mailto:{{$retailerEmail}}">{{$retailerEmail}}</a> </p></td></tr> 
               </table>
             </div>
+            <?php } ?>
             <!-- END FOOTER -->
 
           <!-- END CENTERED WHITE CONTAINER -->
