@@ -13,8 +13,6 @@ import {
     TextContainer,
 } from "@shopify/polaris";
 
-
-
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -77,7 +75,7 @@ function Knowledge() {
                         </p>
                     </Banner>
                     <TextContainer />
-                    <DisplayText size="large">Knowledge Base</DisplayText>
+                    {/* <DisplayText size="large">Knowledge Base</DisplayText>
                     <Accordion
                         expanded={expanded === "panel1"}
                         onChange={handleChange("panel1")}
@@ -158,7 +156,7 @@ function Knowledge() {
                                 and it will be used in this app to function.
                             </TextContainer>
                         </AccordionDetails>
-                    </Accordion>
+                    </Accordion> */}
                 </Stack>
             </Card>
         </div>
