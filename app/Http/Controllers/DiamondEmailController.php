@@ -542,7 +542,7 @@ class DiamondEmailController extends Controller
             $price = 'Call For Price';
         }
 
-        $vendorEmail = ($storeAdminEmail ? $storeAdminEmail : $ringData['ringData']['vendorEmail']);
+        $vendorEmail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
 
         //MAIL TO USER
         $data = [
@@ -568,7 +568,7 @@ class DiamondEmailController extends Controller
             'price' => $price,
             'vendorID' => $diamondData['diamondData']['vendorID'] ? $diamondData['diamondData']['vendorID'] : '',
             'vendorName' => $diamondData['diamondData']['vendorName'] ? $diamondData['diamondData']['vendorName'] : '',
-            'vendorEmail' => $diamondData['diamondData']['vendorEmail'] ? $diamondData['diamondData']['vendorEmail'] : '',
+            'vendorEmail' => $vendorEmail,
             'vendorContactNo' => $diamondData['diamondData']['vendorContactNo'] ? $diamondData['diamondData']['vendorContactNo'] : '',
             'vendorStockNo' => $diamondData['diamondData']['vendorStockNo'] ? $diamondData['diamondData']['vendorStockNo'] : '',
             'vendorFax' => $diamondData['diamondData']['vendorFax'] ? $diamondData['diamondData']['vendorFax'] : '',

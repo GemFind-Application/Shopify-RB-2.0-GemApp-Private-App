@@ -448,15 +448,7 @@ td > a.logo > img{height: 52px; object-fit: contain;}
               </tr>
               
             <!-- END MAIN CONTENT AREA -->
-            </table>
-
-            <!-- START FOOTER -->
-            <div class="footer">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tr><td><p>This message was sent to {{$hint_Recipient_name}}</p></td></tr> 
-              </table>
-            </div>
-            <!-- END FOOTER -->
+            </table>         
 
           <!-- END CENTERED WHITE CONTAINER -->
           </div>

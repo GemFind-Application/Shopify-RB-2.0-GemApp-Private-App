@@ -551,7 +551,7 @@ class RingEmailController extends Controller
             $min_carat = $ringData['ringData']['centerStoneMaxCarat'] ? $ringData['ringData']['centerStoneMaxCarat'] : '';
             $metalType = $ringData['ringData']['metalType'] ? $ringData['ringData']['metalType'] : '';
         }
-        $vendorEmail = ($storeAdminEmail ? $storeAdminEmail : $ringData['ringData']['vendorEmail']);
+        $vendorEmail = $storeAdminEmail ? $storeAdminEmail : $getCustomerData->email;
         $vendorName = ($ringData['ringData']['vendorName'] ? $ringData['ringData']['vendorName'] : $schldData['shop']);
 
         $shopData = $this->getShopJsonData($sch_view_post_data['shopurl']);
@@ -585,7 +585,7 @@ class RingEmailController extends Controller
             'retailerFax' => $ringData['ringData']['retailerInfo']->retailerFax ? $ringData['ringData']['retailerInfo']->retailerFax : '',
             'retailerAddress' => $ringData['ringData']['retailerInfo']->retailerAddress ? $ringData['ringData']['retailerInfo']->retailerAddress : '',
             'vendorName' => $vendorName,
-            'vendorEmail' => $ringData['ringData']['vendorEmail'],
+            'vendorEmail' => $vendorEmail,
             'vendorPhone' => $ringData['ringData']['vendorPhone'],
             'shop_logo' => $store_logo,
             'shop_logo_alt' => $schldData->shop,

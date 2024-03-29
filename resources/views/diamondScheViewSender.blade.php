@@ -487,10 +487,16 @@ td > a.logo > img{height: 52px; object-fit: contain;}
               </tr>
             <!-- END MAIN CONTENT AREA -->
             </table>
-            <div class="closer">
-              <p>Regards,</p>
-              <p>GemFind Network Team</p>
-            </div>
+             <!-- START FOOTER -->
+             <?php if(isset($vendorEmail)) { ?>
+              <div class="footer">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                            <tr><td> 
+                              <p>If you have any questions about this message, please email <a href="mailto:{{$vendorEmail}}">{{$vendorEmail}}</a> </p></td></tr> 
+                </table>
+              </div>
+              <?php } ?>
+              <!-- END FOOTER -->
 
            <!-- END CENTERED WHITE CONTAINER -->
           </div>

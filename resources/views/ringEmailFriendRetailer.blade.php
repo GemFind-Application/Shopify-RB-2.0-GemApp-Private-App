@@ -467,12 +467,7 @@ td > a.logo > img{height: 52px; object-fit: contain;}
             <!-- END MAIN CONTENT AREA -->
             
             </table>
-            <div class="footer">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tr><td> <p>Do Not Reply To This E-Mail.</p>
-                            <p>This message was sent to {{$frnd_email}}</p></td></tr> 
-              </table>
-            </div>
+          
           <!-- END CENTERED WHITE CONTAINER -->
           </div>
         </td>

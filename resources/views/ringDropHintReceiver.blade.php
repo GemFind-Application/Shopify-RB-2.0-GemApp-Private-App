@@ -387,7 +387,7 @@ td > a.logo > img{height: 52px; object-fit: contain;}
             <?php if(isset($retailerEmail)) { ?>
             <div class="footer">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tr><td> <p>Do Not Reply To This E-Mail.</p>
+                          <tr><td> 
                             <p>If you have any questions about this message, please email <a href="mailto:{{$retailerEmail}}">{{$retailerEmail}}</a> </p>
                             </td></tr> 
               </table>
