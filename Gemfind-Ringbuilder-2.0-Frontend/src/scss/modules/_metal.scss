@@ -13,10 +13,11 @@
     }
     .metal_lists{   
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         padding-left: 0;
         flex-wrap: wrap;
-       
+
+      
     .metal_box{
         font-size: 14px;
         font-weight: 400;
@@ -34,11 +35,14 @@
             flex: 0 0 65px;
             margin-bottom: 0;
         }
+        .gf-metal_text{
+            margin: 5px;
+        }      
         span{
             display: block;
             text-align: center;
             font-family: 'Lato', sans-serif;
-            font-size: 16px;
+            font-size:15px;
             margin: 7px 0;
         }
         .metalcolor_box{
@@ -48,6 +52,9 @@
             margin: 0;
         }
         .White , .Platinum{
+            border-color: $gray;
+        }
+        .Tone{
             border-color: $gray;
         }
         .Rose{

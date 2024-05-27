@@ -10,22 +10,23 @@ use PDF;
 
 class AddToCartController extends Controller
 {
-    public function addToCart(Request $request){
-         header('Access-Control-Allow-Origin: *');
+    public function addToCart(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
         // echo '<pre>';print_r($request->all());exit;
 
- 		$shop_data = User::where('name', $request->shop_domain)->firstOrFail();
-        $shop_base_url = "https://".$request->shop_domain;
+        $shop_data = User::where('name', $request->shop_domain)->firstOrFail();
+        $shop_base_url = "https://" . $request->shop_domain;
         $diamond_product_id = "";
         $setting_product_id = "";
-        if($request->diamond_id){
-            try{
-                $diamondData = $this->getDiamondById($request->dealer_id,$request->diamond_id,$request->is_lab);
-                 // print_r($diamondData['diamondData']['fltPrice']);
-                 //    exit;
-                $url = 'https://'.$request->shop_domain.'/admin/api/2020-07/graphql.json';
+        if ($request->diamond_id) {
+            try {
+                $diamondData = $this->getDiamondById($request->dealer_id, $request->diamond_id, $request->is_lab);
+                // print_r($diamondData['diamondData']['fltPrice']);
+                //    exit;
+                $url = 'https://' . $request->shop_domain . '/admin/api/2020-07/graphql.json';
                 $qry = '{
-                            productVariants(first: 250, query: "'.$request->diamond_id.'") {
+                            productVariants(first: 250, query: "' . $request->diamond_id . '") {
                                 edges {
                                 cursor
                                 node {
@@ -45,32 +46,36 @@ class AddToCartController extends Controller
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $qry);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/graphql',
-                'X-Shopify-Access-Token:'.$shop_data->password)
+                curl_setopt(
+                    $ch,
+                    CURLOPT_HTTPHEADER,
+                    array(
+                        'Content-Type: application/graphql',
+                        'X-Shopify-Access-Token:' . $shop_data->password
+                    )
                 );
                 $server_output = curl_exec($ch);
-                $sku = json_decode($server_output,true);
-                if($sku['data']['productVariants']['edges']){
+                $sku = json_decode($server_output, true);
+                if ($sku['data']['productVariants']['edges']) {
                     $in_shopify = "1";
-                }else{
+                } else {
                     $in_shopify = "0";
                 }
-                if($in_shopify == "1"){
+                if ($in_shopify == "1") {
                     $finalSku = $sku['data']['productVariants']['edges'][0]['node'];
-                    $variantGid = explode('/',$finalSku['id']);
+                    $variantGid = explode('/', $finalSku['id']);
                     $variantId = $variantGid[4];
-                    $productGid = explode('/',$finalSku['product']['id']);
+                    $productGid = explode('/', $finalSku['product']['id']);
                     $productId = $productGid[4];
-                    $InventoryGid = explode('/',$finalSku['inventoryItem']['id']);
+                    $InventoryGid = explode('/', $finalSku['inventoryItem']['id']);
                     $InventoryId = $InventoryGid[4];
                     $products_array = array(
                         "product" => array(
                             "id"                => $productId,
-                            "variants"          => array(array("id" => $variantId,"price" => number_format($diamondData['diamondData']['fltPrice']))),
+                            "variants"          => array(array("id" => $variantId, "price" => number_format($diamondData['diamondData']['fltPrice']))),
                         )
                     );
-                    $update_product = $shop_data->api()->rest('PUT','/admin/products/'.$productId.'.json',$products_array);
+                    $update_product = $shop_data->api()->rest('PUT', '/admin/products/' . $productId . '.json', $products_array);
                     $product_data = json_encode($update_product);
                     $finalProductData = json_decode($product_data);
                     $diamond_product_id = $finalProductData->body->product->variants[0]->id;
@@ -80,7 +85,7 @@ class AddToCartController extends Controller
                     // $updateInventory = $shop_data->api()->rest('POST','/admin/inventory_levels/set.json',$inventory_array);
                     // Log::info($updateInventory);
                     // echo '<pre>';print_r($diamond_product_id);exit;
-                }else{
+                } else {
                     $products_array = array(
                         "product" => array(
                             "title"             => $diamondData['diamondData']['mainHeader'],
@@ -89,31 +94,32 @@ class AddToCartController extends Controller
                             "product_type"      => "GemFindDiamond",
                             "published_scope"   => "web",
                             "tags"              => "SEARCHANISE_IGNORE,GemfindDiamond",
-                            "variants"          => array(array("sku" => $request->diamond_id,"price" => number_format($diamondData['diamondData']['fltPrice']))),
-                            "metafields"        => array(array("namespace" => "seo","key" => "hidden","value" => 1,"type" => "integer"))
+                            "variants"          => array(array("sku" => $request->diamond_id, "price" => number_format($diamondData['diamondData']['fltPrice']))),
+                            "metafields"        => array(array("namespace" => "seo", "key" => "hidden", "value" => 1, "type" => "integer")),
+                            "sales_channels"    => ["online"] // Adding sales_channels here
                         )
                     );
 
 
-                    $create_product = $shop_data->api()->rest('POST','/admin/products.json',$products_array);
+                    $create_product = $shop_data->api()->rest('POST', '/admin/products.json', $products_array);
                     $product_data = json_encode($create_product);
                     $finalProductData = json_decode($product_data);
                     $product_id = $finalProductData->body->product->id;
                     $diamond_product_id = $finalProductData->body->product->variants[0]->id;
                     $image_array = array("image" => array("attachment" => base64_encode(file_get_contents($diamondData['diamondData']['image2']))));
-                    $create_product_image = $shop_data->api()->rest('POST','/admin/products/'.$product_id.'/images.json',$image_array);
+                    $create_product_image = $shop_data->api()->rest('POST', '/admin/products/' . $product_id . '/images.json', $image_array);
                 }
             } catch (Exception $e) {
-                redirect($this->agent->referrer().'/error');
+                redirect($this->agent->referrer() . '/error');
             }
         }
-        if($request->setting_id){
-            try{
-                $settingDataRIng = $this->getRingById($request->dealer_id,$request->setting_id);
-                    // echo '<pre>';print_r($settingDataRIng['settingData']);exit;
-                $urlRing = 'https://'.$request->shop_domain.'/admin/api/2020-07/graphql.json';
+        if ($request->setting_id) {
+            try {
+                $settingDataRIng = $this->getRingById($request->dealer_id, $request->setting_id);
+                // echo '<pre>';print_r($settingDataRIng['settingData']);exit;
+                $urlRing = 'https://' . $request->shop_domain . '/admin/api/2020-07/graphql.json';
                 $qryRing = '{
-                            productVariants(first: 250, query: "'.$request->setting_id.'") {
+                            productVariants(first: 250, query: "' . $request->setting_id . '") {
                                 edges {
                                 cursor
                                 node {
@@ -134,29 +140,33 @@ class AddToCartController extends Controller
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $qryRing);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/graphql',
-                'X-Shopify-Access-Token:'.$shop_data->password)
+                curl_setopt(
+                    $ch,
+                    CURLOPT_HTTPHEADER,
+                    array(
+                        'Content-Type: application/graphql',
+                        'X-Shopify-Access-Token:' . $shop_data->password
+                    )
                 );
                 $server_outputRing = curl_exec($ch);
-                $skuRIng = json_decode($server_outputRing,true);
-                    // echo '<pre>';print_r($skuRIng);exit;
-                if(!empty(($skuRIng['data']['productVariants']['edges']))){
+                $skuRIng = json_decode($server_outputRing, true);
+                // echo '<pre>';print_r($skuRIng);exit;
+                if (!empty(($skuRIng['data']['productVariants']['edges']))) {
                     $in_ring_shopify = "1";
-                }else{
+                } else {
                     $in_ring_shopify = "0";
                 }
-                if($in_ring_shopify == "1"){
-                    if($request->sidestonequalityvalue){
-                        $roption_name = $request->ringsizesettingonly." / ".$request->metaltype." / ".$request->sidestonequalityvalue." / ".$request->centerstonesizevalue;
-                    }else{
-                        $roption_name = $request->ringsizesettingonly." / ".$request->metaltype." / ".$request->centerstonesizevalue;
+                if ($in_ring_shopify == "1") {
+                    if ($request->sidestonequalityvalue) {
+                        $roption_name = $request->ringsizesettingonly . " / " . $request->metaltype . " / " . $request->sidestonequalityvalue . " / " . $request->centerstonesizevalue;
+                    } else {
+                        $roption_name = $request->ringsizesettingonly . " / " . $request->metaltype . " / " . $request->centerstonesizevalue;
                     }
                     $finalSkuRing = $skuRIng['data']['productVariants']['edges'][0]['node'];
                     // echo '<pre>';print_r($diamond_product_id);exit;
-                    $variantGidRIng = explode('/',$finalSkuRing['id']);
+                    $variantGidRIng = explode('/', $finalSkuRing['id']);
                     $variantIdRIng = $variantGidRIng[4];
-                    $productGidRIng = explode('/',$finalSkuRing['product']['id']);
+                    $productGidRIng = explode('/', $finalSkuRing['product']['id']);
                     $productIdRIng = $productGidRIng[4];
                     // $InventoryGidRIng = explode('/',$finalSkuRing['inventoryItem']['id']);
                     // $InventoryIdRIng = $InventoryGid[4];
@@ -165,19 +175,19 @@ class AddToCartController extends Controller
                     $products_array_ring = array(
                         "product" => array(
                             "id"                => $productIdRIng,
-                            "variants"          => array(array("id" => $variantIdRIng,"price" => number_format($price),"option1" => $roption_name)),
+                            "variants"          => array(array("id" => $variantIdRIng, "price" => number_format($price), "option1" => $roption_name)),
                         )
                     );
-                    $update_productRIng = $shop_data->api()->rest('PUT','/admin/products/'.$productIdRIng.'.json',$products_array_ring);
+                    $update_productRIng = $shop_data->api()->rest('PUT', '/admin/products/' . $productIdRIng . '.json', $products_array_ring);
                     $product_dataRIng = json_encode($update_productRIng);
                     $finalProductDataRIng = json_decode($product_dataRIng);
                     $setting_product_id = $finalProductDataRIng->body->product->variants[0]->id;
                     // echo '<pre>';print_r($setting_product_id);exit;
-                }else{
-                    if($request->sidestonequalityvalue){
-                        $roption_name = $request->ringsizesettingonly." / ".$request->metaltype." / ".$request->sidestonequalityvalue." / ".$request->centerstonesizevalue;
-                    }else{
-                        $roption_name = $request->ringsizesettingonly." / ".$request->metaltype." / ".$request->centerstonesizevalue;
+                } else {
+                    if ($request->sidestonequalityvalue) {
+                        $roption_name = $request->ringsizesettingonly . " / " . $request->metaltype . " / " . $request->sidestonequalityvalue . " / " . $request->centerstonesizevalue;
+                    } else {
+                        $roption_name = $request->ringsizesettingonly . " / " . $request->metaltype . " / " . $request->centerstonesizevalue;
                     }
                     $products_array_ring = array(
                         "product" => array(
@@ -187,26 +197,27 @@ class AddToCartController extends Controller
                             "product_type"      => "GemFindRing",
                             "published_scope"   => "web",
                             "tags"              => "SEARCHANISE_IGNORE,GemfindRing",
-                            "variants"          => array(array("sku" => $request->setting_id,"price" => number_format($settingDataRIng['settingData']['cost']),"option1" => $roption_name)),
-                            "metafields"        => array(array("namespace" => "seo","key" => "hidden","value" => 1,"type" => "integer"))
+                            "variants"          => array(array("sku" => $request->setting_id, "price" => number_format($settingDataRIng['settingData']['cost']), "option1" => $roption_name)),
+                            "metafields"        => array(array("namespace" => "seo", "key" => "hidden", "value" => 1, "type" => "integer")),
+                            "sales_channels"    => ["online"] // Adding sales_channels here
                         )
                     );
-                    $create_product_ring = $shop_data->api()->rest('POST','/admin/products.json',$products_array_ring);
+                    $create_product_ring = $shop_data->api()->rest('POST', '/admin/products.json', $products_array_ring);
                     $product_data_ring = json_encode($create_product_ring);
                     $finalProductDataRIng = json_decode($product_data_ring);
                     $setting_product_id = $finalProductDataRIng->body->product->variants[0]->id;
                     $product_id_ring = $finalProductDataRIng->body->product->id;
                     $image_array_ring = array("image" => array("attachment" => base64_encode(file_get_contents($settingDataRIng['settingData']['imageUrl']))));
-                    $create_product_image_ring = $shop_data->api()->rest('POST','/admin/products/'.$product_id_ring.'/images.json',$image_array_ring);
+                    $create_product_image_ring = $shop_data->api()->rest('POST', '/admin/products/' . $product_id_ring . '/images.json', $image_array_ring);
                 }
             } catch (Exception $e) {
-                redirect($this->agent->referrer().'/error');
+                redirect($this->agent->referrer() . '/error');
             }
         }
 
         //REDIRECTING URLS
-        if($diamond_product_id && $setting_product_id){
-            $checkout_url = $shop_base_url."/cart/add?id[]=".$diamond_product_id."&id[]=".$setting_product_id;
+        if ($diamond_product_id && $setting_product_id) {
+            $checkout_url = $shop_base_url . "/cart/add?id[]=" . $diamond_product_id . "&id[]=" . $setting_product_id;
             $response = [
                 'status' => true,
                 'message' => "diamond & ring",
@@ -214,12 +225,13 @@ class AddToCartController extends Controller
             ];
 
             // return response()->header('Access-Control-Allow-Origin', '*')->json($response, 200);
-            echo json_encode($checkout_url);exit;
+            echo json_encode($checkout_url);
+            exit;
             // redirect($checkout_url);
             // exit;
         }
-        if($diamond_product_id){
-            $checkout_url = $shop_base_url."/cart/add?id[]=".$diamond_product_id;
+        if ($diamond_product_id) {
+            $checkout_url = $shop_base_url . "/cart/add?id[]=" . $diamond_product_id;
             $response = [
                 'status' => true,
                 'message' => "diamond",
@@ -227,12 +239,13 @@ class AddToCartController extends Controller
             ];
 
             // return response()->header('Access-Control-Allow-Origin', '*')->json($response, 200);
-            echo json_encode($checkout_url);exit;
+            echo json_encode($checkout_url);
+            exit;
             // redirect($checkout_url);
             // exit;
         }
-        if($setting_product_id){
-            $checkout_url = $shop_base_url."/cart/add?id[]=&id[]=".$setting_product_id;
+        if ($setting_product_id) {
+            $checkout_url = $shop_base_url . "/cart/add?id[]=&id[]=" . $setting_product_id;
             $response = [
                 'status' => true,
                 'message' => "diamond",
@@ -240,19 +253,20 @@ class AddToCartController extends Controller
             ];
 
             // return response()->header('Access-Control-Allow-Origin', '*')->json($response, 200);
-            echo json_encode($checkout_url);exit;
+            echo json_encode($checkout_url);
+            exit;
             // redirect($checkout_url);
             // exit;
         }
-
     }
 
-    public static function getDiamondById($dealerId,$diamondId,$isalab){
-        if($isalab == "true"){
-          $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetDiamondDetail?DealerID=".$dealerId."&DID=".$diamondId.'&IsLabGrown=true';
-       }else{
-         $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetDiamondDetail?DealerID=".$dealerId."&DID=".$diamondId;
-       }
+    public static function getDiamondById($dealerId, $diamondId, $isalab)
+    {
+        if ($isalab == "true") {
+            $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetDiamondDetail?DealerID=" . $dealerId . "&DID=" . $diamondId . '&IsLabGrown=true';
+        } else {
+            $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetDiamondDetail?DealerID=" . $dealerId . "&DID=" . $diamondId;
+        }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $requestUrl);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -260,13 +274,13 @@ class AddToCartController extends Controller
         $response = curl_exec($curl);
         $results = json_decode($response);
         if (curl_errno($curl)) {
-            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.' ];
+            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.'];
         }
-        if(isset($results->message)){
-            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.' ];
+        if (isset($results->message)) {
+            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.'];
         }
         curl_close($curl);
-        if($results->diamondId != "" && $results->diamondId > 0){
+        if ($results->diamondId != "" && $results->diamondId > 0) {
             $diamondData = (array) $results;
             $returnData = ['diamondData' => $diamondData];
         } else {
@@ -275,8 +289,9 @@ class AddToCartController extends Controller
         return $returnData;
     }
 
-    public static function getRingById($dealerId,$settingId){
-        $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetMountingDetail?DealerID=".$dealerId."&SID=".$settingId;
+    public static function getRingById($dealerId, $settingId)
+    {
+        $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetMountingDetail?DealerID=" . $dealerId . "&SID=" . $settingId;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $requestUrl);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -284,13 +299,13 @@ class AddToCartController extends Controller
         $response = curl_exec($curl);
         $results = json_decode($response);
         if (curl_errno($curl)) {
-            return $returnData = ['settingData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.' ];
+            return $returnData = ['settingData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.'];
         }
-        if(isset($results->message)){
-            return $returnData = ['settingData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.' ];
+        if (isset($results->message)) {
+            return $returnData = ['settingData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.'];
         }
         curl_close($curl);
-        if($results->settingId != "" && $results->settingId > 0){
+        if ($results->settingId != "" && $results->settingId > 0) {
             $settingData = (array) $results;
             $returnData = ['settingData' => $settingData];
         } else {
@@ -299,42 +314,44 @@ class AddToCartController extends Controller
         return $returnData;
     }
 
- //    function printDiamond($shop_domain,$diamond_id,$type) {
- //        //header('Access-Control-Allow-Origin', "*");
- //        header('Access-Control-Allow-Origin: *');
- //        $getDiamondData = self::getDiamondByIdForPdf($shop_domain,$diamond_id,$type);
- //        view()->share('diamond',$getDiamondData);
- //        $pdf = PDF::loadView('printDiamond', $getDiamondData);
- //        $headers = array(
- //          'Content-Type: application/pdf',
- //        );
- //        return $pdf->download('Diamond.pdf',$headers);
-	// }
+    //    function printDiamond($shop_domain,$diamond_id,$type) {
+    //        //header('Access-Control-Allow-Origin', "*");
+    //        header('Access-Control-Allow-Origin: *');
+    //        $getDiamondData = self::getDiamondByIdForPdf($shop_domain,$diamond_id,$type);
+    //        view()->share('diamond',$getDiamondData);
+    //        $pdf = PDF::loadView('printDiamond', $getDiamondData);
+    //        $headers = array(
+    //          'Content-Type: application/pdf',
+    //        );
+    //        return $pdf->download('Diamond.pdf',$headers);
+    // }
 
-    function printDiamond($shop_domain,$diamond_id,$type) {
+    function printDiamond($shop_domain, $diamond_id, $type)
+    {
         // header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-        $getDiamondData = self::getDiamondByIdForPdf($shop_domain,$diamond_id,$type);
-        view()->share('diamond',$getDiamondData);
+        $getDiamondData = self::getDiamondByIdForPdf($shop_domain, $diamond_id, $type);
+        view()->share('diamond', $getDiamondData);
         $pdf = PDF::loadView('printDiamond', $getDiamondData);
         $headers = array(
-          'Content-Type: application/pdf',
+            'Content-Type: application/pdf',
         );
-        return $pdf->download('Diamond-'.$diamond_id.'.pdf',$headers);
+        return $pdf->download('Diamond-' . $diamond_id . '.pdf', $headers);
     }
 
 
-    public static function getDiamondByIdForPdf($shop,$diamondId,$type){
+    public static function getDiamondByIdForPdf($shop, $diamondId, $type)
+    {
         $IslabGrown = '';
-        if($type && $type == 'labcreated'){
+        if ($type && $type == 'labcreated') {
             $diamond_type = '&IslabGrown=true';
-        } elseif($type == 'fancydiamonds') {
+        } elseif ($type == 'fancydiamonds') {
             $diamond_type = '&IsFancy=true';
-        }else{
+        } else {
             $diamond_type = '';
         }
- 		$shop_data = DB::table('ringbuilder_config')->where('shop', $shop)->first();
-        $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetDiamondDetail?DealerID=".$shop_data->dealerid."&DID=".$diamondId;
+        $shop_data = DB::table('ringbuilder_config')->where('shop', $shop)->first();
+        $requestUrl = "http://api.jewelcloud.com/api/RingBuilder/GetDiamondDetail?DealerID=" . $shop_data->dealerid . "&DID=" . $diamondId;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $requestUrl);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -342,13 +359,13 @@ class AddToCartController extends Controller
         $response = curl_exec($curl);
         $results = json_decode($response);
         if (curl_errno($curl)) {
-            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.' ];
+            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.'];
         }
-        if(isset($results->message)){
-            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.' ];
+        if (isset($results->message)) {
+            return $returnData = ['diamondData' => [], 'total' => 0, 'message' => 'Gemfind: An error has occurred.'];
         }
         curl_close($curl);
-        if($results->diamondId != "" && $results->diamondId > 0){
+        if ($results->diamondId != "" && $results->diamondId > 0) {
             $diamondData = (array) $results;
             $returnData = ['diamondData' => $diamondData];
         } else {
@@ -357,17 +374,18 @@ class AddToCartController extends Controller
         return $returnData;
     }
 
-    function getProductDetails($shop_domain,$productId,$variantId){
+    function getProductDetails($shop_domain, $productId, $variantId)
+    {
         $settingData = DB::table('ringbuilder_config')->where('shop', $shop_domain)->first();
         // echo "<pre>";
         //     print_r($settingData);
         //     exit;
- 		$shop = User::where('name', $shop_domain)->firstOrFail();
-        $product = $shop->api()->rest('GET','/admin/products/'.$productId.'.json');
-        $variant = $shop->api()->rest('GET','/admin/variants/'.$variantId.'.json');
+        $shop = User::where('name', $shop_domain)->firstOrFail();
+        $product = $shop->api()->rest('GET', '/admin/products/' . $productId . '.json');
+        $variant = $shop->api()->rest('GET', '/admin/variants/' . $variantId . '.json');
         //echo "<pre>";print_r($variant);exit;
-        $meta_fields = $shop->api()->rest('GET','/admin/products/'.$productId.'/metafields.json');
-        if($product){
+        $meta_fields = $shop->api()->rest('GET', '/admin/products/' . $productId . '/metafields.json');
+        if ($product) {
             $getProduct = $product['body']['container']['product'];
             // echo "<pre>";
             // print_r($variant['body']['container']['variant']['price']);
@@ -381,35 +399,35 @@ class AddToCartController extends Controller
             foreach ($getMetaFields as $element) {
                 $groupMetaFields[$element['key']] = $element;
             }
-            if($groupMetaFields){
+            if ($groupMetaFields) {
                 foreach ($groupMetaFields as $meta) {
-                    if (array_key_exists("ringSize",$groupMetaFields)){
+                    if (array_key_exists("ringSize", $groupMetaFields)) {
                         $ringSize = $groupMetaFields['ringSize']['value'];
-                    }else{
+                    } else {
                         $ringSize = "";
                     }
-                    if (array_key_exists("shape",$groupMetaFields)){
+                    if (array_key_exists("shape", $groupMetaFields)) {
                         $shape = $groupMetaFields['shape']['value'];
-                    }else{
+                    } else {
                         $shape = "";
                     }
-                    if (array_key_exists("MinimumCarat",$groupMetaFields)){
+                    if (array_key_exists("MinimumCarat", $groupMetaFields)) {
                         $centerStoneMinCarat = $groupMetaFields['MinimumCarat']['value'];
-                    }else{
+                    } else {
                         $centerStoneMinCarat = "";
                     }
-                    if (array_key_exists("MaximumCarat",$groupMetaFields)){
+                    if (array_key_exists("MaximumCarat", $groupMetaFields)) {
                         $centerStoneMaxCarat = $groupMetaFields['MaximumCarat']['value'];
-                    }else{
+                    } else {
                         $centerStoneMaxCarat = "";
                     }
-                    if (array_key_exists("islabsettings",$groupMetaFields)){
+                    if (array_key_exists("islabsettings", $groupMetaFields)) {
                         $islabsettings = $groupMetaFields['islabsettings']['value'];
-                    }else{
+                    } else {
                         $islabsettings = "";
                     }
                 }
-            }else{
+            } else {
                 $ringSize = "NA";
                 $shape = "NA";
                 $centerStoneMinCarat = "NA";
@@ -425,7 +443,7 @@ class AddToCartController extends Controller
             foreach ($getProduct as $prod) {
 
                 $finalProduct = [
-                    '$id'                   => $getProduct['id'] ? $getProduct['id'] : 'NA' ,
+                    '$id'                   => $getProduct['id'] ? $getProduct['id'] : 'NA',
                     'styleNumber'           => $getProduct['variants'][0]['sku'] ? $getProduct['variants'][0]['sku'] : 'NA',
                     "settingName"           => $getProduct['title'] ? $getProduct['title'] : 'NA',
                     "description"           => $getProduct['body_html'] ? $getProduct['body_html'] : 'NA',
@@ -457,8 +475,8 @@ class AddToCartController extends Controller
                     "dealerId"              => null,
                     "thumbNailImage"        => null,
                     "extraImage"            => $imageFinal,
-                    "relatedProductImage"   => "" ,
-                    "configurableProduct"   => "" ,
+                    "relatedProductImage"   => "",
+                    "configurableProduct"   => "",
                     "prongMetal"            => "",
                     "settingType"           => $getProduct['product_type'] ? $getProduct['product_type'] : 'NA',
                     "width"                 => "",
