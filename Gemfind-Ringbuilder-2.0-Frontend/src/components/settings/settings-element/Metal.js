@@ -45,7 +45,9 @@ const Metal = (props) => {
                     <li
                         onClick={() => props.callBack(item.metalType)}
                         key={item.$id}
-                        className={`metal_box ${
+                        className={`metal_box ${item.metalType
+                            .toLowerCase()
+                            .replace(/\s+/g, "")} ${
                             itemId === item.$id ? "active" : ""
                         } ${item.isActive != "1" ? "disabled" : ""} ${
                             props.selectedMetal === item.metalType
