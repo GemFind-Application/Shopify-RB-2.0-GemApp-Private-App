@@ -23,6 +23,8 @@ import {
 import Knowledge from "../frontend/components/Knowledge/Knowledge";
 import Settings from "../frontend/components/Settings/Settings";
 import Plan from "../frontend/components/Plan/Plan";
+import Import from "../frontend/components/Import/Import";
+
 import CSSConfiguration from "../frontend/components/CSS Configuration/CSSConfiguration";
 
 export default function App() {
@@ -130,7 +132,7 @@ export default function App() {
                 </PolarisProvider>
             </div>
         );
-    } 
+    }
     // else if (planExists === "0") {
     //     console.log("my plan tab");
     //     return (
@@ -160,7 +162,7 @@ export default function App() {
     //         </>
     //     );
     //}
-     else if (showCustomer === 0) {
+    else if (showCustomer === 0) {
         console.log("not customer");
         return (
             <>
@@ -196,7 +198,7 @@ export default function App() {
             </>
         );
     } else if (importType === "2") {
-        console.log("else 3");
+        console.log("else 3..!");
         return (
             <>
                 <PolarisProvider>
@@ -231,7 +233,7 @@ export default function App() {
                                         <Settings callback={handletab} />
                                     )}
                                     {/* {selectedTab === 1 && <Plan />} */}
-                                    {/* {selectedTab === 1 && <Import />} */}
+                                    {selectedTab === 1 && <Import />}
                                     {selectedTab === 2 && <Knowledge />}
                                     {selectedTab === 3 && <CSSConfiguration />}
                                 </Page>

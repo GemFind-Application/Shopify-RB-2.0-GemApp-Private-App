@@ -48,41 +48,39 @@ const AppFrame = (props) => {
         const customer = await res.json();
         setShowCustomer(customer);
     };
-    
-        const getSettingsData = async () => {
-            const res = await fetch(
-                "/api/getSettingsData/" +
-                    document.getElementById("shopOrigin").value,
-                {
-                    method: "GET",
-                }
-            );
-            const settingProduct = await res.json();
-            setImportType(settingProduct.type_1);
-            if (settingProduct.type_1 === "2") {
-                setSelectedTab(1);
-            }
-            setShowTable(true);
-        };
 
-        
-
-        const getPlanId = async () => {
-            const res = await fetch(
-                "/api/ifPlanIdExists/" +
-                    document.getElementById("shopOrigin").value,
-                {
-                    method: "GET",
-                }
-            );
-            const plan = await res.json();
-            // console.log(plan);
-            setPlanExists(plan.data.planIdExists.plan);
-            if (plan.data.planIdExists.plan === "1") {
-                getCustomer();
+    const getSettingsData = async () => {
+        const res = await fetch(
+            "/api/getSettingsData/" +
+                document.getElementById("shopOrigin").value,
+            {
+                method: "GET",
             }
-            setShowTable(true);
-        };
+        );
+        const settingProduct = await res.json();
+        setImportType(settingProduct.type_1);
+        if (settingProduct.type_1 === "2") {
+            setSelectedTab(1);
+        }
+        setShowTable(true);
+    };
+
+    const getPlanId = async () => {
+        const res = await fetch(
+            "/api/ifPlanIdExists/" +
+                document.getElementById("shopOrigin").value,
+            {
+                method: "GET",
+            }
+        );
+        const plan = await res.json();
+        // console.log(plan);
+        setPlanExists(plan.data.planIdExists.plan);
+        if (plan.data.planIdExists.plan === "1") {
+            getCustomer();
+        }
+        setShowTable(true);
+    };
 
     //GET SETTINGS API
 
@@ -143,7 +141,6 @@ const AppFrame = (props) => {
                 <Page fullWidth>
                     <Tabs value={selectedTab} onChange={handleChange}>
                         <Tab style={{ fontSize: "12px" }} label="My Plan" />
-                       
                     </Tabs>
                     {selectedTab === 0 && <Plan callback={handletab} />}
                 </Page>
@@ -189,7 +186,7 @@ const AppFrame = (props) => {
                     {/* </AppBar> */}
                     {selectedTab === 0 && <Settings callback={handletab} />}
                     {/* {selectedTab === 1 && <Plan />} */}
-                    {/* {selectedTab === 1 && <Import />} */}
+                    {selectedTab === 1 && <Import />}
                     {selectedTab === 2 && <Knowledge />}
                     {selectedTab === 3 && <CSSConfiguration />}
                 </Page>

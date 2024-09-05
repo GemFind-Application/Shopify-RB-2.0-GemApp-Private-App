@@ -1320,7 +1320,7 @@ const ProductInformation = (props) => {
                 </p>
 
                 {window.initData.data[0].announcement_text_rbdetail !== "" && (
-                    <div className="diamond-details-text">
+                    <div className="gf-diamond-details-text">
                         <span>
                             {window.initData.data[0].announcement_text_rbdetail}
                         </span>
