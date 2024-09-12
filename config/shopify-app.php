@@ -323,7 +323,7 @@ return [
         [
             'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'app/uninstalled'),
             'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://gemapps.app.theringbuilder.com/webhook/app-uninstalled')
-         ],
+        ],
     ],
 
     /*
