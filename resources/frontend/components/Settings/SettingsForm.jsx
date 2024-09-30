@@ -61,6 +61,18 @@ function SettingsForm(props) {
     //SETTINGS FORM
     const [dealerId, setDealerId] = useState("");
     const handleDealerId = useCallback((value) => setDealerId(value), []);
+
+    const [googleSiteKey, setGoogleSiteKey] = useState("");
+    const handleGoogleSiteKey = useCallback(
+        (value) => setGoogleSiteKey(value),
+        []
+    );
+
+    const [googleSecretKey, setGoogleSecretKey] = useState("");
+    const handleGoogleSecretKey = useCallback(
+        (value) => setGoogleSecretKey(value),
+        []
+    );
     const [adminEmail, setAdminEmail] = useState("");
     const handleAdminEmail = useCallback((value) => setAdminEmail(value), []);
     const [enableHint, setEnableHint] = useState([]);
@@ -72,6 +84,7 @@ function SettingsForm(props) {
         (value) => setEnableSchedule(value),
         []
     );
+
     const [enableInfo, setEnableInfo] = useState([]);
     const handleEnableInfo = useCallback((value) => setEnableInfo(value), []);
     const [enablePrint, setEnablePrint] = useState([]);
@@ -150,6 +163,8 @@ function SettingsForm(props) {
             setShop(settingProduct.shop);
             setAnnouncementText(settingProduct.announcement_text);
             setAnnounceRbDetail(settingProduct.announcement_text_rbdetail);
+            setGoogleSiteKey(settingProduct.google_site_key);
+            setGoogleSecretKey(settingProduct.google_secret_key);
             setShopLogo(settingProduct.shop_logo);
             setValue(settingProduct.settings_carat_ranges);
             setChecked(settingProduct.display_tryon);
@@ -245,6 +260,8 @@ function SettingsForm(props) {
                 valueCarat: valueCarat,
                 announcementText: announcementText,
                 announceRbDetail: announceRbDetail,
+                googleSiteKey: googleSiteKey,
+                googleSecretKey: googleSecretKey,
                 checked: checked,
                 shopLogo: shopLogo,
             };
@@ -525,6 +542,21 @@ function SettingsForm(props) {
                                 ]}
                                 selected={priceLocation}
                                 onChange={handlePriceLocation}
+                            />
+                        </FormLayout.Group>
+
+                        <FormLayout.Group condensed>
+                            <TextField
+                                label="Google reCaptcha Site Key"
+                                value={googleSiteKey}
+                                onChange={handleGoogleSiteKey}
+                                autoComplete="off"
+                            />
+                            <TextField
+                                label="Google reCaptcha Secret Key"
+                                value={googleSecretKey}
+                                onChange={handleGoogleSecretKey}
+                                autoComplete="off"
                             />
                         </FormLayout.Group>
 

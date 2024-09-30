@@ -248,14 +248,20 @@ function CsvImport() {
                                         "RingBuilderAdvance".
                                     </List.Item>
                                     <List.Item>
-                                        Please download your sample file{" "}
-                                        <a href={process.env.CSV_URL} download>
+                                        Please download your sample file -
+                                        <a
+                                            href="https://app.theringbuilder.com/RingBuilderSampleFiles/product_template.xls"
+                                            download
+                                        >
                                             here
                                         </a>
                                     </List.Item>
                                     <List.Item>
-                                        To download installation guide -{" "}
-                                        <a href={process.env.INSTALLATION_URL}>
+                                        To download installation guide -
+                                        <a
+                                            href="https://app.theringbuilder.com/RingBuilderSampleFiles/Ring-Builder-2.0-Installation-Guide.docx"
+                                            download
+                                        >
                                             click here
                                         </a>
                                     </List.Item>

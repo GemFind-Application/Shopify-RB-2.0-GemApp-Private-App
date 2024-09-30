@@ -674,3 +674,29 @@ li.metal_box.\31 8ktwotonegold{
 li.metal_box.\31 4ktwotonegold{
     display:none;
 }
+
+.completering-image-scroll{
+    overflow-x: auto;
+    max-width: 100vw;
+    position: relative;
+    scrollbar-color: #ddd #fff;
+    scrollbar-width: thin;
+    -ms-overflow-style: none;
+    padding-bottom: 5px;
+}
+
+.completeRing .image-thumb-image .image-gallary-box img{
+    width: auto;
+}
+
+.completeRing  .image-thumb-image .image-gallary-box{
+    justify-content: inherit;
+}
+
+.popup_image .imageloader.imageloader-loaded img{
+    width: 100%;
+}
+
+.react-responsive-modal-root .popup_product .popup_pr{
+    font-size: 16px;
+}

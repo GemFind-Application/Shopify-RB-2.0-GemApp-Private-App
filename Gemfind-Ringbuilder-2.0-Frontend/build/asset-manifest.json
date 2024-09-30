@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/apps/engagement-rings/static/css/main.7db837e3.css",
-    "main.js": "/apps/engagement-rings/static/js/main.ffe8b1e5.js",
+    "main.css": "/apps/engagement-rings/static/css/main.8b1ef61e.css",
+    "main.js": "/apps/engagement-rings/static/js/main.d2f9e4e6.js",
     "static/media/diamond.gif": "/apps/engagement-rings/static/media/diamond.ab83c6d22d8820a8944a.gif",
     "static/media/spinner.gif": "/apps/engagement-rings/static/media/spinner.757857ce13a4e4e598e4.gif",
     "static/media/shape-images.png": "/apps/engagement-rings/static/media/shape-images.cdd2376994bc14bad604.png",
@@ -10,11 +10,11 @@
     "static/media/marquise_Large.png": "/apps/engagement-rings/static/media/marquise_Large.41c9b05a27a7aa0aa038.png",
     "static/media/360-view.png": "/apps/engagement-rings/static/media/360-view.dd36a0dfde5dd5da5877.png",
     "index.html": "/apps/engagement-rings/index.html",
-    "main.7db837e3.css.map": "/apps/engagement-rings/static/css/main.7db837e3.css.map",
-    "main.ffe8b1e5.js.map": "/apps/engagement-rings/static/js/main.ffe8b1e5.js.map"
+    "main.8b1ef61e.css.map": "/apps/engagement-rings/static/css/main.8b1ef61e.css.map",
+    "main.d2f9e4e6.js.map": "/apps/engagement-rings/static/js/main.d2f9e4e6.js.map"
   },
   "entrypoints": [
-    "static/css/main.7db837e3.css",
-    "static/js/main.ffe8b1e5.js"
+    "static/css/main.8b1ef61e.css",
+    "static/js/main.d2f9e4e6.js"
   ]
 }

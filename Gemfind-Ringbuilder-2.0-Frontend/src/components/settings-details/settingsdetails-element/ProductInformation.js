@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FacebookProvider, Like } from "react-facebook";
 import { Scrollbars } from "rc-scrollbars";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ProductInformation = (props) => {
     let errors = {};
@@ -41,6 +42,20 @@ const ProductInformation = (props) => {
     const [getSideStone, setSideStone] = useState("");
     const [getNavUrl, setNavUrl] = useState("/apps/engagement-rings/diamonds");
     const [getnavmenu, setnavmenu] = useState([]);
+
+    const [recaptchaToken, setRecaptchaToken] = useState("");
+    const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
+
+    const [recaptchaReqToken, setReqRecaptchaToken] = useState("");
+    const [isReqRecaptchaVerified, setIsReqRecaptchaVerified] = useState(false);
+
+    const [recaptchaEmailFrndToken, setEmailFrndRecaptchaToken] = useState("");
+    const [isEmailFrndRecaptchaVerified, setIsEmailFrndRecaptchaVerified] =
+        useState(false);
+
+    const [recaptchaSchlToken, setSchlRecaptchaToken] = useState("");
+    const [isSchlRecaptchaVerified, setIsSchlRecaptchaVerified] =
+        useState(false);
 
     const [selectedOption, setSelectedOption] = useState("");
 
@@ -137,6 +152,26 @@ const ProductInformation = (props) => {
     const uniqueSideStone = Array.from(new Set(listMetal2));
     console.log(uniqueSideStone);
     //}
+
+    const handleRecaptchaChange = (response) => {
+        setRecaptchaToken(response);
+        setIsRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleReqRecaptchaChange = (response) => {
+        setReqRecaptchaToken(response);
+        setIsReqRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleEmailFrndRecaptchaChange = (response) => {
+        setEmailFrndRecaptchaToken(response);
+        setIsEmailFrndRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleSchlRecaptchaChange = (response) => {
+        setSchlRecaptchaToken(response);
+        setIsSchlRecaptchaVerified(true); // Set verification status
+    };
 
     const navigate = useNavigate();
     const handlemetalType = (event) => {
@@ -374,8 +409,6 @@ const ProductInformation = (props) => {
         navigate("/apps/engagement-rings/completering");
     };
 
-    console.log(props);
-
     //DROP HINT SUBMIT BUTTON
     const [getyourname, setyourname] = useState("");
     const [getyouremail, setyouremail] = useState("");
@@ -455,6 +488,17 @@ const ProductInformation = (props) => {
             formIsValid = false;
         }
 
+        if (
+            window.initData.data[0].google_site_key &&
+            window.initData.data[0].google_secret_key
+        ) {
+            if (recaptchaToken === "") {
+                errors["yourrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             seterror(errors);
@@ -478,6 +522,7 @@ const ProductInformation = (props) => {
                 islabsettings: props.productDetailsData.isLabSetting,
                 shopurl: window.initData.data[0].shop,
                 currency: window.currency,
+                recaptchaToken: recaptchaToken,
             }),
         };
         try {
@@ -574,6 +619,17 @@ const ProductInformation = (props) => {
             formIsValid = false;
         }
 
+        if (
+            window.initData.data[0].google_site_key &&
+            window.initData.data[0].google_secret_key
+        ) {
+            if (recaptchaReqToken === "") {
+                errors["yourreqrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setreqerror(errors);
@@ -595,6 +651,7 @@ const ProductInformation = (props) => {
                 islabsettings: props.productDetailsData.isLabSetting,
                 shopurl: window.initData.data[0].shop,
                 currency: window.currency,
+                recaptchaToken: recaptchaReqToken,
             }),
         };
         try {
@@ -679,6 +736,17 @@ const ProductInformation = (props) => {
             formIsValid = false;
         }
 
+        if (
+            window.initData.data[0].google_site_key &&
+            window.initData.data[0].google_secret_key
+        ) {
+            if (recaptchaEmailFrndToken === "") {
+                errors["yourfrndrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setfrnderror(errors);
@@ -700,6 +768,7 @@ const ProductInformation = (props) => {
                 islabsettings: props.productDetailsData.isLabSetting,
                 shopurl: window.initData.data[0].shop,
                 currency: window.currency,
+                recaptchaToken: recaptchaEmailFrndToken,
             }),
         };
         try {
@@ -803,6 +872,17 @@ const ProductInformation = (props) => {
             formIsValid = false;
         }
 
+        if (
+            window.initData.data[0].google_site_key &&
+            window.initData.data[0].google_secret_key
+        ) {
+            if (recaptchaSchlToken === "") {
+                errors["yourscrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setschderror(errors);
@@ -826,6 +906,7 @@ const ProductInformation = (props) => {
                 islabsettings: props.productDetailsData.isLabSetting,
                 shopurl: window.initData.data[0].shop,
                 currency: window.currency,
+                recaptchaToken: recaptchaSchlToken,
             }),
         };
         try {
@@ -1443,6 +1524,32 @@ const ProductInformation = (props) => {
 
                                                 <div className="prefrence-action">
                                                     <div className="prefrence-action action moveUp">
+                                                        {window.initData.data[0]
+                                                            .google_site_key &&
+                                                            window.initData
+                                                                .data[0]
+                                                                .google_secret_key && (
+                                                                <div className="gf-grecaptcha">
+                                                                    <ReCAPTCHA
+                                                                        sitekey={
+                                                                            window
+                                                                                .initData
+                                                                                .data[0]
+                                                                                .google_site_key
+                                                                        }
+                                                                        onChange={
+                                                                            handleRecaptchaChange
+                                                                        }
+                                                                    />
+
+                                                                    <p>
+                                                                        {" "}
+                                                                        {
+                                                                            geterror.yourrecaptcha
+                                                                        }{" "}
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         <button
                                                             type="submit"
                                                             title="Submit"
@@ -1572,6 +1679,30 @@ const ProductInformation = (props) => {
                                                 <p> {getreqerror.yourcp}</p>
                                                 <div className="prefrence-action">
                                                     <div className="prefrence-action action moveUp">
+                                                        {window.initData.data[0]
+                                                            .google_site_key &&
+                                                            window.initData
+                                                                .data[0]
+                                                                .google_secret_key && (
+                                                                <div className="gf-grecaptcha">
+                                                                    <ReCAPTCHA
+                                                                        sitekey={
+                                                                            window
+                                                                                .initData
+                                                                                .data[0]
+                                                                                .google_site_key
+                                                                        }
+                                                                        onChange={
+                                                                            handleReqRecaptchaChange
+                                                                        }
+                                                                    />
+                                                                    <p>
+                                                                        {
+                                                                            getschderror.yourscrecaptcha
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         <button
                                                             type="submit"
                                                             title="Submit"
@@ -1635,12 +1766,7 @@ const ProductInformation = (props) => {
                                                     value={getemail}
                                                     onChange={handleEmail}
                                                 />
-                                                <p>
-                                                    {" "}
-                                                    {
-                                                        getfrnderror.youremail
-                                                    }{" "}
-                                                </p>
+                                                <p>{getfrnderror.youremail}</p>
                                                 <TextField
                                                     id="fri_name"
                                                     label="Your Friend's Name"
@@ -1650,10 +1776,7 @@ const ProductInformation = (props) => {
                                                     onChange={handleFrndname}
                                                 />
                                                 <p>
-                                                    {" "}
-                                                    {
-                                                        getfrnderror.yourfrndname
-                                                    }{" "}
+                                                    {getfrnderror.yourfrndname}
                                                 </p>
                                                 <TextField
                                                     id="f_email"
@@ -1664,12 +1787,7 @@ const ProductInformation = (props) => {
                                                     value={getfrndemail}
                                                     onChange={handleFrndemail}
                                                 />
-                                                <p>
-                                                    {" "}
-                                                    {
-                                                        getfrnderror.youremail
-                                                    }{" "}
-                                                </p>
+                                                <p>{getfrnderror.youremail}</p>
                                                 <TextField
                                                     id="email-fri_message"
                                                     multiline
@@ -1685,6 +1803,30 @@ const ProductInformation = (props) => {
 
                                                 <div className="prefrence-action">
                                                     <div className="prefrence-action action moveUp">
+                                                        {window.initData.data[0]
+                                                            .google_site_key &&
+                                                            window.initData
+                                                                .data[0]
+                                                                .google_secret_key && (
+                                                                <div className="gf-grecaptcha">
+                                                                    <ReCAPTCHA
+                                                                        sitekey={
+                                                                            window
+                                                                                .initData
+                                                                                .data[0]
+                                                                                .google_site_key
+                                                                        }
+                                                                        onChange={
+                                                                            handleEmailFrndRecaptchaChange
+                                                                        }
+                                                                    />
+                                                                    <p>
+                                                                        {
+                                                                            getfrnderror.yourfrndrecaptcha
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         <button
                                                             type="submit"
                                                             title="Submit"
@@ -1890,6 +2032,30 @@ const ProductInformation = (props) => {
 
                                                 <div className="prefrence-action">
                                                     <div className="prefrence-action action moveUp">
+                                                        {window.initData.data[0]
+                                                            .google_site_key &&
+                                                            window.initData
+                                                                .data[0]
+                                                                .google_secret_key && (
+                                                                <div className="gf-grecaptcha">
+                                                                    <ReCAPTCHA
+                                                                        sitekey={
+                                                                            window
+                                                                                .initData
+                                                                                .data[0]
+                                                                                .google_site_key
+                                                                        }
+                                                                        onChange={
+                                                                            handleSchlRecaptchaChange
+                                                                        }
+                                                                    />
+                                                                    <p>
+                                                                        {
+                                                                            getschderror.yourscrecaptcha
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         <button
                                                             type="submit"
                                                             title="Submit"

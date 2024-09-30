@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function formatprice(finalprice) {
     finalprice = finalprice.toString();
@@ -35,21 +36,31 @@ const CompleteRingInfo = (props) => {
     const [getTryonsrc, setTryonsrc] = useState("");
     const locationurl = useLocation();
 
+    const [recaptchaToken, setRecaptchaToken] = useState("");
+    const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
+
+    const [recaptchaSchlToken, setSchlRecaptchaToken] = useState("");
+    const [isSchlRecaptchaVerified, setIsSchlRecaptchaVerified] =
+        useState(false);
+
     const onOpenModal = (e) => {
         e.preventDefault();
         setOpen(true);
     };
     const onCloseModal = () => setOpen(false);
     var ringprice = Number(props.settingDetailsData.cost);
-
     var diamondprice = Number(props.diamondDetailsData.fltPrice);
-    console.log(ringprice);
-    console.log(diamondprice);
-
     var finalprice = ringprice + diamondprice;
 
-    console.log("finalprice");
-    console.log(finalprice);
+    const handleRecaptchaChange = (response) => {
+        setRecaptchaToken(response);
+        setIsRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleSchlRecaptchaChange = (response) => {
+        setSchlRecaptchaToken(response);
+        setIsSchlRecaptchaVerified(true); // Set verification status
+    };
 
     const [openThird, setOpenThird] = useState(false);
     const [openFive, setOpenFive] = useState(false);
@@ -114,9 +125,7 @@ const CompleteRingInfo = (props) => {
             }
         });
     }, []);
-    // console.log(props.settingDetailsData);
-    // console.log(props.diamondDetailsData);
-    // console.log(props.selectedSettingId);
+
     //REQUEST MORE INFORMATION SUBMIT BUTTON
 
     const [getreqname, setreqname] = useState("");
@@ -187,6 +196,17 @@ const CompleteRingInfo = (props) => {
             formIsValid = false;
         }
 
+        if (
+            window.initData.data[0].google_site_key &&
+            window.initData.data[0].google_secret_key
+        ) {
+            if (recaptchaToken === "") {
+                errors["yourreqrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setreqerror(errors);
@@ -224,6 +244,7 @@ const CompleteRingInfo = (props) => {
                 metalType: props.settingDetailsData.metalType
                     ? props.settingDetailsData.metalType
                     : "",
+                recaptchaToken: recaptchaToken,
             }),
         };
         try {
@@ -328,6 +349,17 @@ const CompleteRingInfo = (props) => {
             formIsValid = false;
         }
 
+        if (
+            window.initData.data[0].google_site_key &&
+            window.initData.data[0].google_secret_key
+        ) {
+            if (recaptchaSchlToken === "") {
+                errors["yourscrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setschderror(errors);
@@ -367,6 +399,7 @@ const CompleteRingInfo = (props) => {
                 metalType: props.settingDetailsData.metalType
                     ? props.settingDetailsData.metalType
                     : "",
+                recaptchaToken: recaptchaSchlToken,
             }),
         };
         try {
@@ -649,9 +682,12 @@ const CompleteRingInfo = (props) => {
                         </div>
                     </Modal>
                 </div>
-                <div className="product-info__descreption">
-                    <p>{props.settingDetailsData.description}</p>
-                </div>
+
+                {props.settingDetailsData.description !== "NA" && (
+                    <div className="product-info__descreption">
+                        <p>{props.settingDetailsData.description}</p>
+                    </div>
+                )}
                 <div className="diaomnd-info">
                     <div className="metaltype product-dropdown">
                         <span>Metal Type</span>
@@ -1253,6 +1289,30 @@ const CompleteRingInfo = (props) => {
                                                 </div>
                                                 <div className="prefrence-action">
                                                     <div className="prefrence-action action moveUp">
+                                                        {window.initData.data[0]
+                                                            .google_site_key &&
+                                                            window.initData
+                                                                .data[0]
+                                                                .google_secret_key && (
+                                                                <div className="gf-grecaptcha">
+                                                                    <ReCAPTCHA
+                                                                        sitekey={
+                                                                            window
+                                                                                .initData
+                                                                                .data[0]
+                                                                                .google_site_key
+                                                                        }
+                                                                        onChange={
+                                                                            handleRecaptchaChange
+                                                                        }
+                                                                    />
+                                                                    <p>
+                                                                        {
+                                                                            getreqerror.yourreqrecaptcha
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         <button
                                                             type="submit"
                                                             title="Submit"
@@ -1445,6 +1505,30 @@ const CompleteRingInfo = (props) => {
 
                                                 <div className="prefrence-action">
                                                     <div className="prefrence-action action moveUp">
+                                                        {window.initData.data[0]
+                                                            .google_site_key &&
+                                                            window.initData
+                                                                .data[0]
+                                                                .google_secret_key && (
+                                                                <div className="gf-grecaptcha">
+                                                                    <ReCAPTCHA
+                                                                        sitekey={
+                                                                            window
+                                                                                .initData
+                                                                                .data[0]
+                                                                                .google_site_key
+                                                                        }
+                                                                        onChange={
+                                                                            handleSchlRecaptchaChange
+                                                                        }
+                                                                    />
+                                                                    <p>
+                                                                        {
+                                                                            getschderror.yourscrecaptcha
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         <button
                                                             type="submit"
                                                             title="Submit"
@@ -1522,13 +1606,15 @@ const CompleteRingInfo = (props) => {
                             </button>
                         )}
 
-                        <a
-                            className="btn btn-tryon"
-                            onClick={handlevirtual}
-                            href="#"
-                        >
-                            Virtual Try On
-                        </a>
+                        {window.initData.data[0].display_tryon === 1 && (
+                            <a
+                                className="btn btn-tryon"
+                                onClick={handlevirtual}
+                                href="#"
+                            >
+                                Virtual Try On
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>

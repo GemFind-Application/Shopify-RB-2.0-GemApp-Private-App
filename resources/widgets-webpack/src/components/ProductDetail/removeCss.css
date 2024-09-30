@@ -1,18 +1,27 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css");
+.product-form__item--quantity {
+    display: none !important;
+}
+.add-to-cart.btn--secondary {
+    display: none !important;
+}
+#AddToCart-product-template {
+    display: none !important;
+}
 .product-form__quantity {
-    display: none;
+    display: none !important;
 }
 
 .product-form__buttons {
-    display: none;
+    display: none !important;
 }
 
 .product-form__cart-submit {
-    display: none;
+    display: none !important;
 }
 
 .shopify-payment-button {
-    display: none;
+    display: none !important;
 }
 
 .react-responsive-modal-root div:empty {
@@ -20,7 +29,7 @@
 }
 
 .react-overlay-loader-spinner {
-    background-image: url("https://gemapps.app.theringbuilder.com/apps/ringbuilderadvance/images/diamond.gif");
+    background-image: url("https://gemapps.app.theringbuilder.com/apps/engagement-rings/images/diamond.gif");
     width: 100%;
     height: 100%;
     background-size: auto;
@@ -121,7 +130,7 @@
 }
 
 .loading_overlay_wrapper div span {
-    display: none;
+    display: none !important;
 }
 
 .loading_overlay_wrapper div {
@@ -337,57 +346,6 @@ textarea {
 .MuiFormControlLabel-root {
     margin-bottom: 0px;
 }
-
-/*
-@media (max-width: 576px) {
-    .react-responsive-modal-container {
-        overflow-y: auto;
-    }
-    .react-responsive-modal-modal {
-        margin: 1.2rem;
-        top: 50px;
-    }
-    .react-responsive-modal-root .popup-form-small {
-        margin: 1.2rem;
-        top: 50px;
-    }
-} */
-
-/* @media (max-width: 768px) {
-    .react-responsive-modal-modal {
-        top: 10%;
-    }
-    .react-responsive-modal-root .popup-form-small {
-        top: 10%;
-    }
-} */
-
-/* @media (max-width: 992px) {
-    .react-responsive-modal-modal {
-        top: 8%;
-    }
-    .react-responsive-modal-root .popup-form-small {
-        top: 8%;
-    }
-} */
-
-/* @media (max-width: 1200px) {
-    .react-responsive-modal-modal {
-        top: 8%;
-    }
-    .react-responsive-modal-root .popup-form-small {
-        top: 8%;
-    }
-}
-
-@media (max-width: 1400px) {
-    .react-responsive-modal-modal {
-        top: 8%;
-    }
-    .react-responsive-modal-root .popup-form-small {
-        top: 8%;
-    }
-} */
 
 select {
     appearance: auto !important;

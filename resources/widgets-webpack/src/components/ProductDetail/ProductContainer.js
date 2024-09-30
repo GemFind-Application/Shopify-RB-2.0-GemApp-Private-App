@@ -14,6 +14,7 @@ import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { useCookies } from "react-cookie";
+import ReCAPTCHA from "react-google-recaptcha";
 
 if (window.meta.product) {
     if (window.meta.product.type === "RingBuilderAdvance") {
@@ -35,6 +36,20 @@ const ProductContainer = () => {
     ]);
     const [getDiamondCookie, setDiamondCookie] = useState(false);
     const [getsettingcookie, setsettingcookie] = useState(false);
+
+    const [recaptchaToken, setRecaptchaToken] = useState("");
+    const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
+
+    const [recaptchaReqToken, setReqRecaptchaToken] = useState("");
+    const [isReqRecaptchaVerified, setIsReqRecaptchaVerified] = useState(false);
+
+    const [recaptchaEmailFrndToken, setEmailFrndRecaptchaToken] = useState("");
+    const [isEmailFrndRecaptchaVerified, setIsEmailFrndRecaptchaVerified] =
+        useState(false);
+
+    const [recaptchaSchlToken, setSchlRecaptchaToken] = useState("");
+    const [isSchlRecaptchaVerified, setIsSchlRecaptchaVerified] =
+        useState(false);
 
     const [openSecond, setOpenSecond] = useState(false);
     const [openThird, setOpenThird] = useState(false);
@@ -86,6 +101,26 @@ const ProductContainer = () => {
         e.preventDefault();
         setRingSize(e.target.value);
     };
+
+    const handleRecaptchaChange = (response) => {
+        setRecaptchaToken(response);
+        setIsRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleReqRecaptchaChange = (response) => {
+        setReqRecaptchaToken(response);
+        setIsReqRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleEmailFrndRecaptchaChange = (response) => {
+        setEmailFrndRecaptchaToken(response);
+        setIsEmailFrndRecaptchaVerified(true); // Set verification status
+    };
+
+    const handleSchlRecaptchaChange = (response) => {
+        setSchlRecaptchaToken(response);
+        setIsSchlRecaptchaVerified(true); // Set verification status
+    };
     //GET METAFIELDS API
     useEffect(() => {
         // setLoaded(true);
@@ -104,7 +139,7 @@ const ProductContainer = () => {
         const getMetafieldsData = async () => {
             const res = await fetch(
                 "https://gemapps.app.theringbuilder.com/api/getMetafields/" +
-                    window.location.host +
+                    window.Shopify.shop +
                     "/" +
                     window.meta.product.id,
                 {
@@ -121,7 +156,7 @@ const ProductContainer = () => {
             const requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ shop_domain: window.location.host }),
+                body: JSON.stringify({ shop_domain: window.Shopify.shop }),
             };
             try {
                 const res = await fetch(
@@ -217,6 +252,14 @@ const ProductContainer = () => {
             formIsValid = false;
         }
 
+        if (getInitData.google_site_key && getInitData.google_secret_key) {
+            if (recaptchaToken === "") {
+                errors["yourrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             seterror(errors);
@@ -239,11 +282,13 @@ const ProductContainer = () => {
                 settingid: window.meta.product.id,
                 islabsettings: getAllMetafields.islabsettings.value,
                 shopurl: getInitData.shop,
+                currency: getInitData.currency,
+                recaptchaToken: recaptchaToken,
             }),
         };
         try {
             const res = await fetch(
-                "https://gemapps.app.theringbuilder.com/api/dropHintApi",
+                `${getInitData.server_url}/api/dropHintApi`,
                 requestOptions1
             );
             const hintData = await res.json();
@@ -416,6 +461,14 @@ const ProductContainer = () => {
             formIsValid = false;
         }
 
+        if (getInitData.google_site_key && getInitData.google_secret_key) {
+            if (recaptchaReqToken === "") {
+                errors["yourreqrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setreqerror(errors);
@@ -440,11 +493,13 @@ const ProductContainer = () => {
                 productType: productType,
                 max_carat: max_carat,
                 min_carat: min_carat,
+                currency: getInitData.currency,
+                recaptchaToken: recaptchaReqToken,
             }),
         };
         try {
             const res = await fetch(
-                "https://gemapps.app.theringbuilder.com/api/reqInfoApi",
+                `${getInitData.server_url}/api/reqInfoApi`,
                 requestOptions2
             );
             const hintData = await res.json();
@@ -542,6 +597,14 @@ const ProductContainer = () => {
             formIsValid = false;
         }
 
+        if (getInitData.google_site_key && getInitData.google_secret_key) {
+            if (recaptchaEmailFrndToken === "") {
+                errors["yourfrndrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setfrnderror(errors);
@@ -566,11 +629,13 @@ const ProductContainer = () => {
                 productType: productType,
                 max_carat: max_carat,
                 min_carat: min_carat,
+                currency: getInitData.currency,
+                recaptchaToken: recaptchaEmailFrndToken,
             }),
         };
         try {
             const res = await fetch(
-                "https://gemapps.app.theringbuilder.com/api/emailFriendApi",
+                `${getInitData.server_url}/api/emailFriendApi`,
                 requestOptions3
             );
             const hintData = await res.json();
@@ -691,6 +756,14 @@ const ProductContainer = () => {
             formIsValid = false;
         }
 
+        if (getInitData.google_site_key && getInitData.google_secret_key) {
+            if (recaptchaSchlToken === "") {
+                errors["yourscrecaptcha"] =
+                    "The recaptcha token field is required.";
+                formIsValid = false;
+            }
+        }
+
         if (formIsValid == false) {
             console.log(errors);
             setschderror(errors);
@@ -717,11 +790,13 @@ const ProductContainer = () => {
                 productType: productType,
                 max_carat: max_carat,
                 min_carat: min_carat,
+                currency: getInitData.currency,
+                recaptchaToken: recaptchaSchlToken,
             }),
         };
         try {
             const res = await fetch(
-                "https://gemapps.app.theringbuilder.com/api/scheViewApi",
+                `${getInitData.server_url}/api/scheViewApi`,
                 requestOptions4
             );
             const hintData = await res.json();
@@ -946,14 +1021,32 @@ const ProductContainer = () => {
                                                             }
                                                         />
                                                         <p>
-                                                            {" "}
                                                             {
                                                                 geterror.yourdeadline
-                                                            }{" "}
+                                                            }
                                                         </p>
 
                                                         <div className="prefrence-action">
                                                             <div className="prefrence-action action moveUp">
+                                                                {getInitData.google_site_key &&
+                                                                    getInitData.google_secret_key && (
+                                                                        <div className="gf-grecaptcha">
+                                                                            <ReCAPTCHA
+                                                                                sitekey={
+                                                                                    getInitData.google_site_key
+                                                                                }
+                                                                                onChange={
+                                                                                    handleRecaptchaChange
+                                                                                }
+                                                                            />
+
+                                                                            <p>
+                                                                                {
+                                                                                    geterror.yourrecaptcha
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
                                                                 <button
                                                                     type="submit"
                                                                     title="Submit"
@@ -1122,11 +1215,28 @@ const ProductContainer = () => {
                                                             </div>
                                                         </div>
                                                         <p>
-                                                            {" "}
                                                             {getreqerror.yourcp}
                                                         </p>
                                                         <div className="prefrence-action">
                                                             <div className="prefrence-action action moveUp">
+                                                                {getInitData.google_site_key &&
+                                                                    getInitData.google_secret_key && (
+                                                                        <div className="gf-grecaptcha">
+                                                                            <ReCAPTCHA
+                                                                                sitekey={
+                                                                                    getInitData.google_site_key
+                                                                                }
+                                                                                onChange={
+                                                                                    handleReqRecaptchaChange
+                                                                                }
+                                                                            />
+                                                                            <p>
+                                                                                {
+                                                                                    getreqerror.yourreqrecaptcha
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
                                                                 <button
                                                                     type="submit"
                                                                     title="Submit"
@@ -1271,6 +1381,24 @@ const ProductContainer = () => {
 
                                                         <div className="prefrence-action">
                                                             <div className="prefrence-action action moveUp">
+                                                                {getInitData.google_site_key &&
+                                                                    getInitData.google_secret_key && (
+                                                                        <div className="gf-grecaptcha">
+                                                                            <ReCAPTCHA
+                                                                                sitekey={
+                                                                                    getInitData.google_site_key
+                                                                                }
+                                                                                onChange={
+                                                                                    handleEmailFrndRecaptchaChange
+                                                                                }
+                                                                            />
+                                                                            <p>
+                                                                                {
+                                                                                    getfrnderror.yourfrndrecaptcha
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
                                                                 <button
                                                                     type="submit"
                                                                     title="Submit"
@@ -1487,6 +1615,24 @@ const ProductContainer = () => {
 
                                                         <div className="prefrence-action">
                                                             <div className="prefrence-action action moveUp">
+                                                                {getInitData.google_site_key &&
+                                                                    getInitData.google_secret_key && (
+                                                                        <div className="gf-grecaptcha">
+                                                                            <ReCAPTCHA
+                                                                                sitekey={
+                                                                                    getInitData.google_site_key
+                                                                                }
+                                                                                onChange={
+                                                                                    handleSchlRecaptchaChange
+                                                                                }
+                                                                            />
+                                                                            <p>
+                                                                                {
+                                                                                    getschderror.yourscrecaptcha
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
                                                                 <button
                                                                     type="submit"
                                                                     title="Submit"
