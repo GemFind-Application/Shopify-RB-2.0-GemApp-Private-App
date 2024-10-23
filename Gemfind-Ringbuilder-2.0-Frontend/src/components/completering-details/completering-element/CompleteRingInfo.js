@@ -48,9 +48,9 @@ const CompleteRingInfo = (props) => {
         setOpen(true);
     };
     const onCloseModal = () => setOpen(false);
-    var ringprice = Number(props.settingDetailsData.cost);
-    var diamondprice = Number(props.diamondDetailsData.fltPrice);
-    var finalprice = ringprice + diamondprice;
+    var ringprice = Number(props.settingDetailsData.cost).toFixed(0);
+    var diamondprice = Number(props.diamondDetailsData.fltPrice).toFixed(0);
+    var finalprice = Number(ringprice) + Number(diamondprice);
 
     const handleRecaptchaChange = (response) => {
         setRecaptchaToken(response);

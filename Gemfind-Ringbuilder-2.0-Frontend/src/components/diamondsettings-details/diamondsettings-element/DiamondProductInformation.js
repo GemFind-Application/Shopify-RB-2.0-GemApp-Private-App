@@ -709,6 +709,7 @@ const DiamondProductInformation = (props) => {
                 sidestonequalityvalue: getblankvalue[0],
                 ringsizesettingonly: getblankvalue[0],
                 centerstonesizevalue: getblankvalue[0],
+                is_lab: props.productDetailsData.isLabCreated,
             }),
         };
         try {
@@ -1909,7 +1910,7 @@ const DiamondProductInformation = (props) => {
                                 onClick={handleSettings}
                                 className="btn btn-tryon"
                             >
-                                Add Your Settings
+                                Add Your Setting
                             </button>
                         )}
 

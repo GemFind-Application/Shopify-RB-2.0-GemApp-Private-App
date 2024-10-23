@@ -9,150 +9,156 @@ import Skeleton from "react-loading-skeleton";
 import { LoadingOverlay, Loader } from "react-overlay-loader";
 
 const DiamondProductGallary = (props) => {
-  const [getVideo, setVideo] = useState(true);
-  const [getImage, setImage] = useState(false);
-  const [getDefaultImage, setDefaultImage] = useState("");
-  const [selectedImage, setselectedImage] = useState("");
-  const [selectedvideo, setselectedvideo] = useState(true);
-  const [loaded, setLoaded] = useState(false);
+    const [getVideo, setVideo] = useState(true);
+    const [getImage, setImage] = useState(false);
+    const [getDefaultImage, setDefaultImage] = useState("");
+    const [selectedImage, setselectedImage] = useState("");
+    const [selectedvideo, setselectedvideo] = useState(true);
+    const [loaded, setLoaded] = useState(false);
 
-  const [open, setOpen] = useState(false);
-  const onCloseModal = () => setOpen(false);
+    const [open, setOpen] = useState(false);
+    const onCloseModal = () => setOpen(false);
 
-  const [openVideo, setOpenVideo] = useState(false);
+    const [openVideo, setOpenVideo] = useState(false);
 
-  const onOpenModalVideo = () => setOpenVideo(true);
-  const onCloseModalVideo = () => {
-    console.log("close");
-    setOpenVideo(false);
-  };
+    const onOpenModalVideo = () => setOpenVideo(true);
+    const onCloseModalVideo = () => {
+        console.log("close");
+        setOpenVideo(false);
+    };
 
-  const changevideo = (e) => {
-    e.preventDefault();
-    setVideo(true);
-    setImage(false);
-    setselectedvideo(true);
-    // console.log(selectedvideo);
-    setselectedImage("");
-  };
+    const changevideo = (e) => {
+        e.preventDefault();
+        setVideo(true);
+        setImage(false);
+        setselectedvideo(true);
+        // console.log(selectedvideo);
+        setselectedImage("");
+    };
 
-  const changeimage = (e) => {
-    e.preventDefault();
-    setselectedImage(e.target.id);
-    setDefaultImage(e.target.src);
-    setVideo(false);
-    setImage(true);
-    setselectedvideo(false);
-  };
+    const changeimage = (e) => {
+        e.preventDefault();
+        setselectedImage(e.target.id);
+        setDefaultImage(e.target.src);
+        setVideo(false);
+        setImage(true);
+        setselectedvideo(false);
+    };
 
-  useEffect(() => {
-    if (props.productDetailsData.videoFileName) {
-      setVideo(true);
-      setImage(false);
-      setselectedvideo(true);
-    } else {
-      setVideo(false);
-      setImage(true);
-      setselectedvideo(false);
-    }
-    setDefaultImage(props.productDetailsData.defaultDiamondImage);
-    console.log(props.productDetailsData.videoFileName);
-  }, []);
-
-  var imagesGallery = [];
-  if (props.productDetailsData.image1) {
-    imagesGallery.push({ thumbnail: props.productDetailsData.image1 });
-  }
-  // if(props.productDetailsData.image2){
-  //   imagesGallery.push({'thumbnail':props.productDetailsData.image2})
-  // }
-  if (props.productDetailsData.defaultDiamondImage) {
-    imagesGallery.push({
-      thumbnail: props.productDetailsData.defaultDiamondImage,
-    });
-  }
-
-  function PreloaderImage(props) {
-    return (
-      <img
-        className="preloaderr"
-        alt="spinner"
-        src={
-          window.initData.data[0].server_url +
-          process.env.PUBLIC_URL +
-          "/images/spinner.gif"
+    useEffect(() => {
+        if (props.productDetailsData.videoFileName) {
+            setVideo(true);
+            setImage(false);
+            setselectedvideo(true);
+        } else {
+            setVideo(false);
+            setImage(true);
+            setselectedvideo(false);
         }
-        style={{ width: "21px", height: "24px" }}
-      />
-    );
-  }
-  return (
-    <>
-      <div className="product-image-gallary">
-        <div className={`thumbnailimage image-thumb-image`}>
-          <ul className="image-gallary-box">
-            {props.productDetailsData.videoFileName !== "" ? (
-              <li
-                onClick={onOpenModalVideo}
-                className={`image-gallary-list ${
-                  selectedvideo === true ? "active" : ""
-                } `}
-              >
-                <ImageLoader
-                  src={
+        setDefaultImage(props.productDetailsData.defaultDiamondImage);
+        console.log(props.productDetailsData.videoFileName);
+    }, []);
+
+    var imagesGallery = [];
+    if (props.productDetailsData.image1) {
+        imagesGallery.push({ thumbnail: props.productDetailsData.image1 });
+    }
+    // if(props.productDetailsData.image2){
+    //   imagesGallery.push({'thumbnail':props.productDetailsData.image2})
+    // }
+    if (props.productDetailsData.defaultDiamondImage) {
+        imagesGallery.push({
+            thumbnail: props.productDetailsData.defaultDiamondImage,
+        });
+    }
+
+    function PreloaderImage(props) {
+        return (
+            <img
+                className="preloaderr"
+                alt="spinner"
+                src={
                     window.initData.data[0].server_url +
                     process.env.PUBLIC_URL +
-                    "/images/360-view.png"
-                  }
-                >
-                  <img id={-1} alt="product-gallery" />
-                  <div>Error!</div>
-                  <div className="image_loaader">
-                    {" "}
-                    <PreloaderImage />{" "}
-                  </div>
-                </ImageLoader>
-              </li>
-            ) : (
-              ""
-            )}
+                    "/images/spinner.gif"
+                }
+                style={{ width: "21px", height: "24px" }}
+            />
+        );
+    }
+    return (
+        <>
+            <div className="product-image-gallary">
+                <div className={`thumbnailimage image-thumb-image`}>
+                    <ul className="image-gallary-box">
+                        {props.productDetailsData.videoFileName !== "" ? (
+                            <li
+                                onClick={onOpenModalVideo}
+                                className={`image-gallary-list ${
+                                    selectedvideo === true ? "active" : ""
+                                } `}
+                            >
+                                <ImageLoader
+                                    src={
+                                        window.initData.data[0].server_url +
+                                        process.env.PUBLIC_URL +
+                                        "/images/360-view.png"
+                                    }
+                                >
+                                    <img id={-1} alt="product-gallery" />
+                                    <div>Error!</div>
+                                    <div className="image_loaader">
+                                        {" "}
+                                        <PreloaderImage />{" "}
+                                    </div>
+                                </ImageLoader>
+                            </li>
+                        ) : (
+                            ""
+                        )}
 
-            <Modal open={openVideo} onClose={onCloseModalVideo} center>
-              <div className={`ring-diamond-video active`}>
-                <LoadingOverlay className="_loading_overlay_wrapper">
-                  <Loader fullPage loading={loaded} />
-                </LoadingOverlay>
-                <iframe
-                  src={props.productDetailsData.videoFileName}
-                  id="iframevideo"
-                  width="560"
-                  height="350"
-                  scrolling="no"
-                ></iframe>
-              </div>
-            </Modal>
+                        <Modal
+                            open={openVideo}
+                            onClose={onCloseModalVideo}
+                            center
+                        >
+                            <div className={`ring-diamond-video active`}>
+                                <LoadingOverlay className="_loading_overlay_wrapper">
+                                    <Loader fullPage loading={loaded} />
+                                </LoadingOverlay>
+                                <iframe
+                                    src={props.productDetailsData.videoFileName}
+                                    id="iframevideo"
+                                    width="560"
+                                    height="430"
+                                    scrolling="no"
+                                ></iframe>
+                            </div>
+                        </Modal>
 
-            {imagesGallery.map((val, index) => (
-              <li
-                key={index}
-                onClick={changeimage}
-                className={`image-gallary-list ${
-                  selectedImage === index.toString() ? "active" : ""
-                }`}
-              >
-                <ImageLoader src={val.thumbnail}>
-                  <img id={index} alt="product-gallery" />
-                  <div>Error!</div>
-                  <div className="image_loaader">
-                    {" "}
-                    <PreloaderImage />{" "}
-                  </div>
-                </ImageLoader>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* <div
+                        {imagesGallery.map((val, index) => (
+                            <li
+                                key={index}
+                                onClick={changeimage}
+                                className={`image-gallary-list ${
+                                    selectedImage === index.toString()
+                                        ? "active"
+                                        : ""
+                                }`}
+                            >
+                                <ImageLoader src={val.thumbnail}>
+                                    <img id={index} alt="product-gallery" />
+                                    <div>Error!</div>
+                                    <div className="image_loaader">
+                                        {" "}
+                                        <PreloaderImage />{" "}
+                                    </div>
+                                </ImageLoader>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                {/* <div
           className={`ring-diamond-video ${getVideo === true ? "active" : ""} `}
         >
           <iframe
@@ -163,63 +169,63 @@ const DiamondProductGallary = (props) => {
             scrolling="no"
           ></iframe>
         </div> */}
-        <div className={`ring-diamond-image-dia active`}>
-          <ImageLoader src={getDefaultImage}>
-            <img alt="product-gallery" />
-            <div>Error!</div>
-            <div className="image_loaader">
-              {" "}
-              <PreloaderImage />{" "}
+                <div className={`ring-diamond-image-dia active`}>
+                    <ImageLoader src={getDefaultImage}>
+                        <img alt="product-gallery" />
+                        <div>Error!</div>
+                        <div className="image_loaader">
+                            {" "}
+                            <PreloaderImage />{" "}
+                        </div>
+                    </ImageLoader>
+                </div>
+                <div className="product-skus">
+                    <h2>SKU#{props.productDetailsData.diamondId}</h2>
+                </div>
+                <div className="diamond-report-link">
+                    {props.productDetailsData.certificateUrl !== "" && (
+                        <p>
+                            <strong>Diamond Grading Report</strong>{" "}
+                            <a
+                                href="#!"
+                                onClick={() =>
+                                    window.open(
+                                        props.productDetailsData.certificateUrl,
+                                        "CERTVIEW",
+                                        "scrollbars=yes,resizable=yes,width=860,height=550"
+                                    )
+                                }
+                                className="view-text"
+                            >
+                                {" "}
+                                View
+                            </a>
+                        </p>
+                    )}
+                    {props.productDetailsData.certificateUrl === "" && (
+                        <p>
+                            <strong>Diamond Grading Report</strong>{" "}
+                            <a href="#!" className="view-text">
+                                {" "}
+                                Not Available
+                            </a>
+                        </p>
+                    )}
+                </div>
+                <div className="diamond-grade">
+                    <div className="grade-image">
+                        <img
+                            src={props.productDetailsData.certificateIconUrl}
+                            alt="grade-image"
+                        ></img>
+                    </div>
+                    <div className="grade-info">
+                        <p>{props.productDetailsData.subHeader}</p>
+                    </div>
+                </div>
             </div>
-          </ImageLoader>
-        </div>
-        <div className="product-skus">
-          <h2>SKU#{props.productDetailsData.diamondId}</h2>
-        </div>
-        <div className="diamond-report-link">
-          {props.productDetailsData.certificateUrl !== "" && (
-            <p>
-              <strong>Diamond Grading Report</strong>{" "}
-              <a
-                href="#!"
-                onClick={() =>
-                  window.open(
-                    props.productDetailsData.certificateUrl,
-                    "CERTVIEW",
-                    "scrollbars=yes,resizable=yes,width=860,height=550"
-                  )
-                }
-                className="view-text"
-              >
-                {" "}
-                View
-              </a>
-            </p>
-          )}
-          {props.productDetailsData.certificateUrl === "" && (
-            <p>
-              <strong>Diamond Grading Report</strong>{" "}
-              <a href="#!" className="view-text">
-                {" "}
-                Not Available
-              </a>
-            </p>
-          )}
-        </div>
-        <div className="diamond-grade">
-          <div className="grade-image">
-            <img
-              src={props.productDetailsData.certificateIconUrl}
-              alt="grade-image"
-            ></img>
-          </div>
-          <div className="grade-info">
-            <p>{props.productDetailsData.subHeader}</p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 };
 
 export default DiamondProductGallary;
