@@ -475,6 +475,7 @@ const CompleteRingInfo = (props) => {
                 removeCookie("shopify_ringbackvalue", { path: "/" });
                 removeCookie("_shopify_ringsetting", { path: "/" });
             }
+            setLoaded(false);
             window.location.href = addtocartData;
         } catch (errors) {
             console.log(errors);

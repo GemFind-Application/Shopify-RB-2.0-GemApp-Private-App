@@ -696,6 +696,9 @@ const DiamondProductInformation = (props) => {
     //Add To Cart
     const handleAddToCart = async (e) => {
         e.preventDefault();
+        setLoaded(true);
+
+        console.log("click on button");
 
         const requestOptions = {
             method: "POST",
@@ -718,6 +721,7 @@ const DiamondProductInformation = (props) => {
                 requestOptions
             );
             const addtocartData = await res.json();
+            setLoaded(false);
             window.location.href = addtocartData;
         } catch (error) {
             console.log(error);

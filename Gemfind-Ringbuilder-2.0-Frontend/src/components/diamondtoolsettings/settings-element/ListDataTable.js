@@ -91,10 +91,20 @@ const ListDataTable = (props) => {
         console.log(tab);
 
         try {
+            // if (tab === "labgrown") {
+            //     var url = `${window.initData.data[0].diamonddetailapi}DealerID=${window.initData.data[0].dealerid}&DID=${currentId}&IsLabGrown=true`;
+            // } else {
+            //     var url = `${window.initData.data[0].diamonddetailapi}DealerID=${window.initData.data[0].dealerid}&DID=${currentId}&IsLabGrown=false`;
+            // }
+
             if (tab === "labgrown") {
                 var url = `${window.initData.data[0].diamonddetailapi}DealerID=${window.initData.data[0].dealerid}&DID=${currentId}&IsLabGrown=true`;
+            } else if (tab === "fancycolor") {
+                // var url = `${window.initData.data[0].diamonddetailapi}DealerID=${window.initData.data[0].dealerid}&DID=${currentId}&IsFancy=true`;
+                var url = `${window.initData.data[0].diamonddetailapi}DealerID=${window.initData.data[0].dealerid}&DID=${currentId}&IsFancy=true`;
             } else {
                 var url = `${window.initData.data[0].diamonddetailapi}DealerID=${window.initData.data[0].dealerid}&DID=${currentId}&IsLabGrown=false`;
+                // var diamondType = "mined";
             }
 
             const res = await fetch(url);
