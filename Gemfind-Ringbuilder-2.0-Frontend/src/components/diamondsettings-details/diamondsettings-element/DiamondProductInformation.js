@@ -1895,18 +1895,21 @@ const DiamondProductInformation = (props) => {
                     </span>
 
                     <div className="diamond-btn">
-                        {props.productDetailsData.fltPrice !==
-                            "Call for Price" && (
-                            <button
-                                type="submit"
-                                title="Submit"
-                                onClick={handleAddToCart}
-                                className="btn btn-diamond"
-                            >
-                                Add To Cart
-                            </button>
+                        {props.productDetailsData.dsEcommerce === true && (
+                            <div>
+                                {props.productDetailsData.fltPrice !==
+                                    "Call for Price" && (
+                                    <button
+                                        type="submit"
+                                        title="Submit"
+                                        onClick={handleAddToCart}
+                                        className="btn btn-diamond"
+                                    >
+                                        Add To Cart
+                                    </button>
+                                )}
+                            </div>
                         )}
-
                         {getsettingcookie === false && (
                             <button
                                 type="submit"

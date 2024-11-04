@@ -482,6 +482,9 @@ const CompleteRingInfo = (props) => {
         }
     };
 
+    console.log("props.settingDetailsData.rbEcommerce");
+    console.log(props.settingDetailsData.rbEcommerce);
+
     return (
         <>
             <ToastContainer
@@ -1595,18 +1598,21 @@ const CompleteRingInfo = (props) => {
                     </span>
 
                     <div className="diamond-btn">
-                        {props.diamondDetailsData.fltPrice !==
-                            "Call for Price" && (
-                            <button
-                                type="submit"
-                                title="Submit"
-                                onClick={handleAddToCart}
-                                className="btn btn-diamond"
-                            >
-                                Add To Cart
-                            </button>
+                        {props.settingDetailsData.rbEcommerce === true && (
+                            <div className="rbEcommerce">
+                                {props.diamondDetailsData.fltPrice !==
+                                    "Call for Price" && (
+                                    <button
+                                        type="submit"
+                                        title="Submit"
+                                        onClick={handleAddToCart}
+                                        className="btn btn-diamond"
+                                    >
+                                        Add To Cart
+                                    </button>
+                                )}
+                            </div>
                         )}
-
                         {window.initData.data[0].display_tryon === 1 && (
                             <a
                                 className="btn btn-tryon"

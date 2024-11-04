@@ -55,7 +55,16 @@ const DiamondProductGallary = (props) => {
             setImage(true);
             setselectedvideo(false);
         }
-        setDefaultImage(props.productDetailsData.defaultDiamondImage);
+        // setDefaultImage(props.productDetailsData.defaultDiamondImage);
+
+        if (props.productDetailsData.image2) {
+            setDefaultImage(props.productDetailsData.image2);
+        } else if (props.productDetailsData.colorDiamond) {
+            setDefaultImage(props.productDetailsData.colorDiamond);
+        } else {
+            setDefaultImage(props.productDetailsData.defaultDiamondImage);
+        }
+
         console.log(props.productDetailsData.videoFileName);
     }, []);
 
@@ -66,7 +75,21 @@ const DiamondProductGallary = (props) => {
     // if(props.productDetailsData.image2){
     //   imagesGallery.push({'thumbnail':props.productDetailsData.image2})
     // }
-    if (props.productDetailsData.defaultDiamondImage) {
+    // if (props.productDetailsData.defaultDiamondImage) {
+    //     imagesGallery.push({
+    //         thumbnail: props.productDetailsData.defaultDiamondImage,
+    //     });
+    // }
+
+    if (props.productDetailsData.image2) {
+        imagesGallery.push({
+            thumbnail: props.productDetailsData.image2,
+        });
+    } else if (props.productDetailsData.colorDiamond) {
+        imagesGallery.push({
+            thumbnail: props.productDetailsData.colorDiamond,
+        });
+    } else {
         imagesGallery.push({
             thumbnail: props.productDetailsData.defaultDiamondImage,
         });

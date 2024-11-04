@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/apps/engagement-rings/static/css/main.8b1ef61e.css",
-    "main.js": "/apps/engagement-rings/static/js/main.7a094afe.js",
+    "main.js": "/apps/engagement-rings/static/js/main.812793ad.js",
     "static/media/diamond.gif": "/apps/engagement-rings/static/media/diamond.ab83c6d22d8820a8944a.gif",
     "static/media/spinner.gif": "/apps/engagement-rings/static/media/spinner.757857ce13a4e4e598e4.gif",
     "static/media/shape-images.png": "/apps/engagement-rings/static/media/shape-images.cdd2376994bc14bad604.png",
@@ -11,10 +11,10 @@
     "static/media/360-view.png": "/apps/engagement-rings/static/media/360-view.dd36a0dfde5dd5da5877.png",
     "index.html": "/apps/engagement-rings/index.html",
     "main.8b1ef61e.css.map": "/apps/engagement-rings/static/css/main.8b1ef61e.css.map",
-    "main.7a094afe.js.map": "/apps/engagement-rings/static/js/main.7a094afe.js.map"
+    "main.812793ad.js.map": "/apps/engagement-rings/static/js/main.812793ad.js.map"
   },
   "entrypoints": [
     "static/css/main.8b1ef61e.css",
-    "static/js/main.7a094afe.js"
+    "static/js/main.812793ad.js"
   ]
 }
