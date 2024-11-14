@@ -838,7 +838,7 @@ class ImportController extends Controller
     }
 
     public static function getProduct($shopDomain){
-        $api_key = "b6c34a17f7f07efc43f5cd862813e131";
+        $api_key = env('VITE_SHOPIFY_API_KEY');;
         $hostname = $shopDomain;
         $apppassword = "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";
  		// $shop_data = User::where('name', $shopDomain)->firstOrFail();
