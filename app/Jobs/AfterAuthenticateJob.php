@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Webhook;
 use Mail;
 use DB;
+
 class AfterAuthenticateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -66,50 +67,50 @@ class AfterAuthenticateJob implements ShouldQueue
         //ADDING DYNAMIC CSS CONFIGURATION END
 
         //ADDING WEBHOOK AND SCRIPTTAG START
-        $api_key = "2d3e0044ab584108969f219d0600d6e9";
+        $api_key = env('VITE_SHOPIFY_API_KEY');
         $data['webhook'] = array(
             'topic' => 'app/uninstalled',
-            'address' => env('APP_URL').'api/appUninstallJob',
+            'address' => env('APP_URL') . 'api/appUninstallJob',
             'format' => 'json'
         );
         $data_string = json_encode($data);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        $url = 'https://'.$api_key.':'.$shop->password.'@'.$shop->name.'/admin/api/2022-04/webhooks.json';
-        curl_setopt($ch, CURLOPT_URL,$url);
+        $url = 'https://' . $api_key . ':' . $shop->password . '@' . $shop->name . '/admin/api/2022-04/webhooks.json';
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type:application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         $output = curl_exec($ch);
 
         $data['script_tag'] = array(
             "event"     => "onload",
-            'src'       => env('APP_URL')."widgets/static/js/bundle.js",
+            'src'       => env('APP_URL') . "widgets/static/js/bundle.js",
         );
         $data_string = json_encode($data);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        $url = 'https://'.$api_key.':'.$shop->password.'@'.$shop->name.'/admin/api/2022-04/script_tags.json';
-        curl_setopt($ch, CURLOPT_URL,$url);
+        $url = 'https://' . $api_key . ':' . $shop->password . '@' . $shop->name . '/admin/api/2022-04/script_tags.json';
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-Type:application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         $output = curl_exec($ch);
         //ADDING WEBHOOK AND SCRIPTTAG END
 
-        file_put_contents($path.'/authenticate.txt',$theme_data);
+        file_put_contents($path . '/authenticate.txt', $theme_data);
         $data = [
-            'id'=> $finalData->shop->id,
-            'name'=> $finalData->shop->name,
-            'domain'=> $finalData->shop->domain,
-            'email'=> $finalData->shop->email,
-            'created_at'=> $finalData->shop->created_at,
-            'updated_at'=> $finalData->shop->updated_at,
+            'id' => $finalData->shop->id,
+            'name' => $finalData->shop->name,
+            'domain' => $finalData->shop->domain,
+            'email' => $finalData->shop->email,
+            'created_at' => $finalData->shop->created_at,
+            'updated_at' => $finalData->shop->updated_at,
         ];
         $user['to'] = 'gemfind.development@gmail.com';
-        Mail::send('installEmail',$data,function($messages) use ($user){
+        Mail::send('installEmail', $data, function ($messages) use ($user) {
             $messages->to($user['to']);
             $messages->subject('Ring-Builder-React App Install');
         });
@@ -117,11 +118,11 @@ class AfterAuthenticateJob implements ShouldQueue
 
         $arr = array(
             'filters' => array(
-             array(
-                'propertyName' => 'email',
-                'operator' => 'EQ',
-                'value' => $finalData->shop->email
-              )
+                array(
+                    'propertyName' => 'email',
+                    'operator' => 'EQ',
+                    'value' => $finalData->shop->email
+                )
             )
         );
         $post_json = json_encode($arr);
@@ -129,8 +130,8 @@ class AfterAuthenticateJob implements ShouldQueue
         $file = "newarray_log.txt";
         file_put_contents($file, $post_json);
 
-        $email_id=$finalData->shop->email;
-        $endpoint ='https://api.hubapi.com/contacts/v1/contact/email/'.$email_id.'/profile?hapikey=ee625d9a-7fde-44b5-b026-d5f771cfc343';
+        $email_id = $finalData->shop->email;
+        $endpoint = 'https://api.hubapi.com/contacts/v1/contact/email/' . $email_id . '/profile?hapikey=ee625d9a-7fde-44b5-b026-d5f771cfc343';
         $ch = curl_init();
         //curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -143,10 +144,10 @@ class AfterAuthenticateJob implements ShouldQueue
         $curl_errors = curl_error($ch);
         curl_close($ch);
 
-        $file = $domain."-install_status_log".time().".txt";
+        $file = $domain . "-install_status_log" . time() . ".txt";
         file_put_contents($file, $status_code);
 
-        $file = $domain."-install_response_log".time().".txt";
+        $file = $domain . "-install_response_log" . time() . ".txt";
         file_put_contents($file, $response);
 
         $current_date = date('Y-m-d H:i:s');
@@ -162,15 +163,15 @@ class AfterAuthenticateJob implements ShouldQueue
                         'property' => 'Install_Date',
                         'value' => $current_date
                     ),
-                   array(
+                    array(
                         'property' => 'app_status',
                         'value' => 'REGISTER-RINGBUILDER-2.0'
                     )
                 )
             );
             $post_json1 = json_encode($arr1);
-            $email_id1=$finalData->shop->email;
-            $endpoint1 ='https://api.hubapi.com/contacts/v1/contact/email/'.$email_id1.'/profile?hapikey=ee625d9a-7fde-44b5-b026-d5f771cfc343';
+            $email_id1 = $finalData->shop->email;
+            $endpoint1 = 'https://api.hubapi.com/contacts/v1/contact/email/' . $email_id1 . '/profile?hapikey=ee625d9a-7fde-44b5-b026-d5f771cfc343';
             $ch1 = curl_init();
             curl_setopt($ch1, CURLOPT_POST, true);
             curl_setopt($ch1, CURLOPT_POSTFIELDS, $post_json1);
@@ -182,76 +183,76 @@ class AfterAuthenticateJob implements ShouldQueue
             $curl_errors1 = curl_error($ch1);
             curl_close($ch1);
 
-            $file = $domain."-reinstall_status_log".time().".txt";
+            $file = $domain . "-reinstall_status_log" . time() . ".txt";
             file_put_contents($file, $status_code1);
 
-            $file = $domain."-reinstall_response_log".time().".txt";
+            $file = $domain . "-reinstall_response_log" . time() . ".txt";
             file_put_contents($file, $response1);
-        }  else{
-        $arr2 = array(
-            'properties' => array(
-                array(
-                    'property' => 'email',
-                    'value' => $finalData->shop->email
-                ),
-                array(
-                    'property' => 'shop_name',
-                    'value' => $finalData->shop->name
-                ),
-                array(
-                    'property' => 'domain_name',
-                    'value' => $finalData->shop->domain
-                ),
-                array(
-                    'property' => 'phone',
-                    'value' => $finalData->shop->phone
-                ),
-                array(
-                    'property' => 'state',
-                    'value' => $finalData->shop->province
-                ),
-                array(
-                    'property' => 'country',
-                    'value' => $finalData->shop->country_name
-                ),
-                array(
-                    'property' => 'address',
-                    'value' => $finalData->shop->address1
-                ),
-                array(
-                    'property' => 'city',
-                    'value' => $finalData->shop->city
-                ),
-                array(
+        } else {
+            $arr2 = array(
+                'properties' => array(
+                    array(
+                        'property' => 'email',
+                        'value' => $finalData->shop->email
+                    ),
+                    array(
+                        'property' => 'shop_name',
+                        'value' => $finalData->shop->name
+                    ),
+                    array(
+                        'property' => 'domain_name',
+                        'value' => $finalData->shop->domain
+                    ),
+                    array(
+                        'property' => 'phone',
+                        'value' => $finalData->shop->phone
+                    ),
+                    array(
+                        'property' => 'state',
+                        'value' => $finalData->shop->province
+                    ),
+                    array(
+                        'property' => 'country',
+                        'value' => $finalData->shop->country_name
+                    ),
+                    array(
+                        'property' => 'address',
+                        'value' => $finalData->shop->address1
+                    ),
+                    array(
+                        'property' => 'city',
+                        'value' => $finalData->shop->city
+                    ),
+                    array(
                         'property' => 'Install_Date',
                         'value' => $current_date
-                ),
-                array(
-                    'property' => 'app_status',
-                    'value' => 'INSTALL-RINGBUILDER-2.0'
+                    ),
+                    array(
+                        'property' => 'app_status',
+                        'value' => 'INSTALL-RINGBUILDER-2.0'
+                    )
                 )
-            )
-        );
-        $post_json2 = json_encode($arr2);
-        $file = "newpost_data_log3.txt";
-        file_put_contents($file, $post_json2);
-        $endpoint2 = 'https://api.hubapi.com/contacts/v1/contact?hapikey=ee625d9a-7fde-44b5-b026-d5f771cfc343';
-        $ch2 = curl_init();
-        curl_setopt($ch2, CURLOPT_POST, true);
-        curl_setopt($ch2, CURLOPT_POSTFIELDS, $post_json2);
-        curl_setopt($ch2, CURLOPT_URL, $endpoint2);
-        curl_setopt($ch2, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-        $response2 = curl_exec($ch2);
-        $status_code2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-        $curl_errors2 = curl_error($ch2);
-        curl_close($ch2);
-        $file = $domain."-fresh_install_response_log".time().".txt";
-        file_put_contents($file, $response2);
-        $file = $domain."-fresh_install_status_log".time().".txt";
-        file_put_contents($file, $status_code2);
-        return;
-    }
+            );
+            $post_json2 = json_encode($arr2);
+            $file = "newpost_data_log3.txt";
+            file_put_contents($file, $post_json2);
+            $endpoint2 = 'https://api.hubapi.com/contacts/v1/contact?hapikey=ee625d9a-7fde-44b5-b026-d5f771cfc343';
+            $ch2 = curl_init();
+            curl_setopt($ch2, CURLOPT_POST, true);
+            curl_setopt($ch2, CURLOPT_POSTFIELDS, $post_json2);
+            curl_setopt($ch2, CURLOPT_URL, $endpoint2);
+            curl_setopt($ch2, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            $response2 = curl_exec($ch2);
+            $status_code2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+            $curl_errors2 = curl_error($ch2);
+            curl_close($ch2);
+            $file = $domain . "-fresh_install_response_log" . time() . ".txt";
+            file_put_contents($file, $response2);
+            $file = $domain . "-fresh_install_status_log" . time() . ".txt";
+            file_put_contents($file, $status_code2);
+            return;
+        }
 
         // echo "test";exit;
         // $API_KEY =$this->config->item('api_key');
