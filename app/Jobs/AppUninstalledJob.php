@@ -60,7 +60,7 @@ class AppUninstalledJob extends \Osiset\ShopifyApp\Messaging\Jobs\AppUninstalled
             // 'plan_name'=> $finalData['plan_name'],
             'updated_at'=> $finalData['updated_at'],
         ];
-        $user['to'] = 'gemfind.development@gmail.com';
+        $user['to'] = ['dev@gemfind.com', 'support@gemfind.com', 'billing@gemfind.com'];
         Mail::send('uninstallEmail',$data,function($messages) use ($user){
             $messages->to($user['to']);
             $messages->subject('Ring-Builder-React App Uninstall');

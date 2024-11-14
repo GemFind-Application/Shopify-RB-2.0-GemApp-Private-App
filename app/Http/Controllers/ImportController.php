@@ -838,7 +838,7 @@ class ImportController extends Controller
     }
 
     public static function getProduct($shopDomain){
-        $api_key = "2d3e0044ab584108969f219d0600d6e9";
+        $api_key = "b6c34a17f7f07efc43f5cd862813e131";
         $hostname = $shopDomain;
         $apppassword = "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";
  		// $shop_data = User::where('name', $shopDomain)->firstOrFail();

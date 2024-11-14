@@ -175,7 +175,7 @@ class AddToCartController extends Controller
                     $products_array_ring = array(
                         "product" => array(
                             "id"                => $productIdRIng,
-                            "variants"          => array(array("id" => $variantIdRIng, "price" => number_format($price), "option1" => $roption_name)),
+                            // "variants"          => array(array("id" => $variantIdRIng, "price" => number_format($price), "option1" => $roption_name)),
                         )
                     );
                     $update_productRIng = $shop_data->api()->rest('PUT', '/admin/products/' . $productIdRIng . '.json', $products_array_ring);

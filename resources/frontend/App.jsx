@@ -71,7 +71,7 @@ export default function App() {
         const settingProduct = await res.json();
         setImportType(settingProduct.type_1);
         if (settingProduct.type_1 === "2") {
-            setSelectedTab(1);
+            setSelectedTab(0);
         }
         setShowTable(true);
     };
@@ -215,10 +215,10 @@ export default function App() {
                                             label="Settings"
                                         />
                                         {/* <Tab style={{ fontSize: "12px" }} label="My Plans" /> */}
-                                        <Tab
+                                        {/* <Tab
                                             style={{ fontSize: "12px" }}
                                             label="CSV Import"
-                                        />
+                                        /> */}
                                         <Tab
                                             style={{ fontSize: "12px" }}
                                             label="Knowledge Base"
@@ -233,9 +233,9 @@ export default function App() {
                                         <Settings callback={handletab} />
                                     )}
                                     {/* {selectedTab === 1 && <Plan />} */}
-                                    {selectedTab === 1 && <Import />}
-                                    {selectedTab === 2 && <Knowledge />}
-                                    {selectedTab === 3 && <CSSConfiguration />}
+                                    {/* {selectedTab === 1 && <Import />} */}
+                                    {selectedTab === 1 && <Knowledge />}
+                                    {selectedTab === 2 && <CSSConfiguration />}
                                 </Page>
                             </QueryProvider>
                         </AppBridgeProvider>

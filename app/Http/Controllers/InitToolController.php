@@ -11,6 +11,7 @@ class InitToolController extends Controller
 {
     public function initToolApi(Request $request)
     {
+        // header('Access-Control-Allow-Origin: *');
         $settingData = DB::table('ringbuilder_config')->where(['shop'=>$request->shop_domain])->get()->first();
         $css_configuration = CssConfigure::where(['shop'=>$request->shop_domain])->first();
         // echo '<pre>';print_r($settingData);exit;
@@ -141,11 +142,46 @@ class InitToolController extends Controller
         $settingData->server_url = (string)$protocol.'://'.request()->getHost();
         $settingData->currency = $this->getCurrency($settingData->dealerid);
         $settingData->currencyFrom = $this->getCurrencyFrom($settingData->dealerid);
-        $settingData->link_colour = $css_configuration ? $css_configuration->link : "#fff";
-        $settingData->hover_colour = $css_configuration ? $css_configuration->hover : "#fff";
-        $settingData->slider_colour = $css_configuration ? $css_configuration->slider : "#fff";
-        $settingData->header_colour = $css_configuration ? $css_configuration->header : "#fff";
-        $settingData->button_colour = $css_configuration ? $css_configuration->button : "#fff";
+
+        $styleSettingColors = $this->getStyleSetting($settingData->dealerid);
+        $hoverEffect = $styleSettingColors['hoverEffect'];
+        $columnHeaderAccent = $styleSettingColors['columnHeaderAccent'];
+        $linkColor = $styleSettingColors['linkColor'];
+        $callToActionButton = $styleSettingColors['callToActionButton'];
+
+
+         // echo "<pre>"; print_r($callToActionButton); exit();
+
+        //linkColor
+        if (isset($linkColor) && !empty($linkColor)) {
+            $settingData->link_colour = $linkColor;
+        } else {
+            $settingData->link_colour = '#999';
+        }
+
+        //hoverEffect
+        if (isset($hoverEffect) && !empty($hoverEffect)) {
+            $settingData->hover_colour = $hoverEffect;
+        } else {
+            $settingData->hover_colour = '#92cddc';
+        }
+
+         //Sliders
+        $settingData->slider_colour = $css_configuration ? $css_configuration->slider : '#828282';
+
+        if (isset($columnHeaderAccent) && !empty($columnHeaderAccent)) {
+            $settingData->header_colour = $columnHeaderAccent;
+        } else {
+            $settingData->header_colour = '#000000';
+        }
+
+        //callToActionButton
+        if (isset($callToActionButton) && !empty($callToActionButton)) {
+            $settingData->button_colour = $callToActionButton;
+        } else {
+            $settingData->button_colour = '#000022';
+        }
+
 
         if(!empty($settingData)){
             $msg['message'] = 'Init Tool Data Successfully';
@@ -206,6 +242,53 @@ class InitToolController extends Controller
 
         return $currencyFrom;
     }
+
+     public function getStyleSetting($dealerid)
+    {
+        $settingApi = 'http://api.jewelcloud.com/api/RingBuilder/GetStyleSetting?DealerID=' . $dealerid;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $settingApi);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        $response = curl_exec($curl);
+        $server_output = json_decode($response, true);
+
+       
+
+        //hoverEffect
+        if ($server_output[0][0]['hoverEffect']) {
+            $hoverEffectColor = $server_output[0][0]['hoverEffect'];
+            $hoverEffect = empty($hoverEffectColor[0]['color2']) ? $hoverEffectColor[0]['color1'] : $hoverEffectColor[0]['color2'];
+        }
+
+        //columnHeaderAccent
+        if ($server_output[0][0]['columnHeaderAccent']) {
+            $columnHeaderAccentColor = $server_output[0][0]['columnHeaderAccent'];
+            $columnHeaderAccent = empty($columnHeaderAccentColor[0]['color2']) ? $columnHeaderAccentColor[0]['color1'] : $columnHeaderAccentColor[0]['color2'];
+        }
+
+        //linkColor
+        if ($server_output[0][0]['linkColor']) {
+            $linkColors = $server_output[0][0]['linkColor'];
+            $linkColor = empty($linkColors[0]['color2']) ? $linkColors[0]['color1'] : $linkColors[0]['color2'];
+        }
+
+        //callToActionButton
+        if ($server_output[0][0]['callToActionButton']) {
+            $callToActionButtonColor = $server_output[0][0]['callToActionButton'];
+            $callToActionButton = empty($callToActionButtonColor[0]['color2']) ? $callToActionButtonColor[0]['color1'] : $callToActionButtonColor[0]['color2'];
+        }
+
+        $styleSettingColors = [
+            'hoverEffect' => $hoverEffect,
+            'columnHeaderAccent' => $columnHeaderAccent,
+            'linkColor' => $linkColor,
+            'callToActionButton' => $callToActionButton,
+        ];
+
+        return $styleSettingColors;
+    }
+
     // public function initToolApi1(Request $request)
     // {
     //     $settingData = DB::table('ringbuilder_config')->where(['shop'=>$request->shop_domain])->get()->first();

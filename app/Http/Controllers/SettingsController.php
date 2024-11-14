@@ -371,8 +371,8 @@ class SettingsController extends Controller
                 // 'settings_carat_ranges'         => $value['valueCarat'],
                 'announcement_text'             => $value['announcementText'],
                 'announcement_text_rbdetail'    => $value['announceRbDetail'],
-                'google_site_key'               => $value['googleSiteKey'],
-                'google_secret_key'             => $value['googleSecretKey'],
+                'google_site_key'                 => $value['googleSiteKey'],
+                'google_secret_key'               => $value['googleSecretKey'],
                 'created_at'                    => date('Y-m-d h:i:s'),
                 'updated_at'                    => date('Y-m-d h:i:s'),
             ];
